@@ -1,6 +1,7 @@
 package model;
 
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Data
 public class Persona {
@@ -11,5 +12,6 @@ public class Persona {
     private String telefono;
     private String email;
     private String direccion;
+    private LocalDateTime fechaCreacion;
 
 }

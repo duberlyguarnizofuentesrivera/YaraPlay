@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface Dao<T> {
-    jdbcConnection jdbc = new jdbcConnection();
+    JdbcConnection jdbc = new JdbcConnection();
     Optional<T> get(long id);
 
     List<T> getAll();
