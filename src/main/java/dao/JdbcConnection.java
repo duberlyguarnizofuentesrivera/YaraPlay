@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JdbcConnection {
     private static final Logger log = LoggerFactory.getLogger(JdbcConnection.class);
@@ -24,7 +26,6 @@ public class JdbcConnection {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
     }
 
     public ResultSet execute(String query) {
@@ -34,15 +35,54 @@ public class JdbcConnection {
             statement = connection.createStatement();
             log.info("Query realizado a la DB: {}", query);
             return statement.executeQuery(query);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error al ejecutar la query: {}", query);
             e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
-    public void close() {
+    public List<String[]> executeQuery(String query) {
+        connection = connect();
+        ArrayList<String[]> result = new ArrayList<>();
+        assert connection != null;
+        try {
+            statement = connection.createStatement();
+            log.info("Query realizado a la DB: {}", query);
+            ResultSet resultSet = statement.executeQuery(query);
+            int columnCount = resultSet.getMetaData().getColumnCount();
+            while (resultSet.next()) {
+                int i = 1;
+                String[] row = new String[columnCount];
+                while (i <= columnCount) {
+                    row[i - 1] = resultSet.getString(i++);
+                }
+                result.add(row);
+            }
+        } catch (SQLException e) {
+            log.error("Error al ejecutar la query: {}", query);
+            e.printStackTrace();
+            close();
+            throw new RuntimeException(e);
+        }
+        close();
+        return result;
+    }
+    public boolean executeUpdate(String query){
+        connection = connect();
+        assert connection != null;
+        try {
+            statement = connection.createStatement();
+            log.info("Query realizado a la DB: {}", query);
+            return statement.executeUpdate(query) > 0;
+        } catch (SQLException e) {
+            log.error("Error al ejecutar la query: {}", query);
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void close() {
         try {
             connection.close();
             statement.close();

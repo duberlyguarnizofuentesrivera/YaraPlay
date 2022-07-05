@@ -8,7 +8,7 @@ public class Proveedor {
     private Persona persona;
     private String razonSocial;
     private String ruc;
-    private String dirección;
+    private String direccion;
     private String telefono;
 
 }
