@@ -20,7 +20,7 @@ public class YaraAppWindow {
         frame = new JFrame("Yara Play");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
-        panelUsuario = new PanelUsuario();
+        panelUsuario = new PanelUsuario(frame);
         frame.setContentPane(panelUsuario);
         frame.pack();
         frame.setVisible(true);
