@@ -1,12 +1,8 @@
 
-e
-5src/main/java/controller/UsuarioBasicoController.java,c/c/ccc6d9362f71def13351ea9e9e8b0e9b02ee9dd2
 b
 2src/main/java/controller/AlmaceneroController.java,3/3/3355f799203408c5e5f7864198ac7298ed8a8aa7
 ]
 -src/main/java/controller/AdminController.java,c/f/cf3e40cc91b027c4280d6e139162e74b787b94b8
-7
-pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
 w
 G.idea/sonarlint/issuestore/9/5/9560a1c4a66c87090cfd0c261bcd9453be43bd82,6/1/610fb0bd50c97f37b9844acfea7f5b4f610a494a
 P
@@ -33,11 +29,7 @@ Q
 !src/main/java/model/Producto.java,8/2/82d4d0c5b7a28279e35e6a9db28f55de7ad2053c
 Z
 *src/main/java/dao/impl/AnaquelDaoImpl.java,2/c/2cf68219e8d0929013db7daf1bd7c276b35172c2
-\
-,src/main/java/dao/impl/CategoriaDaoImpl.java,2/c/2c17df916d4a2d65bcec2ec5013401bec2a782fa
 [
 +src/main/java/dao/impl/EmpleadoDaoImpl.java,5/f/5f7fd2b67a149add1070cc6db9185a4724303340
-U
-%src/main/java/dao/JdbcConnection.java,d/c/dc58c4777111e8a2e23f7775503982e5658e402d
 R
 "src/main/java/model/Proveedor.java,a/d/ad72aba8294493d68064b8f5d71ffa9330ad01e5

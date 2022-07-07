@@ -37,7 +37,6 @@ public class RegistroAccesoDaoImpl implements Dao<RegistroAcceso> {
                 + registroAcceso.getFechaLogin() + "', '"
                 + registroAcceso.getFechaLogout() + "')";
         jdbcConnection.executeUpdate(query);
-
     }
 
     @Override

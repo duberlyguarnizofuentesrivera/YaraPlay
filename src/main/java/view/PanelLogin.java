@@ -75,7 +75,7 @@ public class PanelLogin extends JDialog {
         JPanel bp = new JPanel();
         bp.add(btnLogin);
         bp.add(btnCancel);
-
+        this.getRootPane().setDefaultButton(btnLogin);
         getContentPane().add(panel, BorderLayout.CENTER);
         getContentPane().add(bp, BorderLayout.PAGE_END);
 
