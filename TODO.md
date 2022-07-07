@@ -18,3 +18,18 @@
 - [ ] crear pedido
 - [ ] solicitar pedido
 - [ ] verificar aprobación de pedido
+## Base de datos
+- [x] Crear base de datos
+- [x] Crear tabla de anaquel
+- [x] Crear tabla de categoria
+- [x] Crear tabla de empleados
+- [x] Crear tabla de persona
+- [x] Crear tabla de producto
+- [ ] Crear tabla de productoRegistroIngreso
+- [ ] Crear tabla de productoRegistroSalida
+- [x] Crear tabla de proveedor
+- [x] Crear tabla de registroacceso
+- [x] Crear tabla de registroingreso
+- [x] Crear tabla de registrosalida
+- [x] Crear tabla de rol
+- [x] Crear tabla de sucursal

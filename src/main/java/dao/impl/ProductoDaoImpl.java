@@ -33,8 +33,7 @@ public class ProductoDaoImpl implements Dao<Producto> {
     @Override
     public void save(Producto producto) {
         JdbcConnection jdbcConnection = new JdbcConnection();
-        String query = "INSERT INTO producto (id, anaquel_id, categoria_id, proveedor_id, nombre, estado, stock) VALUES ("
-                + producto.getId() + ", "
+        String query = "INSERT INTO producto (anaquel_id, categoria_id, proveedor_id, nombre, estado, stock) VALUES ("
                 + producto.getAnaquel().getId() + ", " + "'"
                 + producto.getCategoria().getId() + "', " + "'"
                 + producto.getProveedor().getId() + "', " + "'"
