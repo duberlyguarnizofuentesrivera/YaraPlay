@@ -72,4 +72,13 @@ public class ProductoDaoImpl implements Dao<Producto> {
             productos.add(producto);
         }
     }
+
+    public List<Producto> findByName(String name) {
+        List<Producto> productos = new ArrayList<>();
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String query = "SELECT * FROM producto WHERE nombre LIKE '%" + name + "%'";
+        List<String[]> resultados = jdbcConnection.executeQuery(query);
+        convertToProducto(productos, resultados);
+        return productos;
+    }
 }

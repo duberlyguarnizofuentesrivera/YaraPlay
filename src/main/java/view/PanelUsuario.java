@@ -1,7 +1,10 @@
 package view;
 
 
+import dao.impl.ProductoDaoImpl;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,12 +25,28 @@ public class PanelUsuario extends JPanel implements PanelYara {
     private final JButton btnAgregarProducto = new JButton("Agregar Producto");
     private final JButton btnEliminarProducto = new JButton("Eliminar Producto");
     JButton btnVerificarProductosMalEstado = new JButton("Ver productos por vencer");
-    private final JButton btnLogin = new JButton("Login");
+    final JButton btnLogin = new JButton("Login");
 
     JLabel labelUsuarioNombre = new JLabel("Nombre: (inicie sesión)");
     JLabel labelUsuarioRol = new JLabel("Rol: (inicie sesión)");
     JLabel labelUsuarioFecha = new JLabel("Login: --/--/--");
+
+    //----Controles de panel supervisor---------------
+    JButton btnSuperCrearAnaquel = new JButton("Crear Anaquel");
+    JButton btnSuperCrearProveedor = new JButton("Crear Proveedor");
+    JButton btnSuperCrearCategoria = new JButton("Crear Categoría");
+    JButton btnSuperEliminarAnaquel = new JButton("Eliminar Anaquel");
+    JButton btnSuperEliminarProveedor = new JButton("Eliminar Proveedor");
+    JButton btnSuperEliminarCategoria = new JButton("Eliminar Categoría");
+    //----Controles de panel admin---------------
+    JButton btnAdminCrearUsuario = new JButton("Crear Usuario");
+    JButton btnAdminEliminarUsuario = new JButton("Eliminar Usuario");
+    JButton btnAdminResetCredenciales = new JButton("Resetear Credenciales");
+    JButton btnAdminCrearSucursal = new JButton("Crear Sucursal");
+    JButton btnAdminEliminarSucursal = new JButton("Eliminar Sucursal");
     JFrame frame;
+    JPanel supervisorAdminPanel = new JPanel();
+    GridBagConstraints mainConstraints = new GridBagConstraints();
 
     public PanelUsuario(JFrame frame) {
         super();
@@ -43,12 +62,13 @@ public class PanelUsuario extends JPanel implements PanelYara {
     @Override
     public void crearControles() {
         this.setLayout(new GridBagLayout());
-        GridBagConstraints mainConstraints = new GridBagConstraints();
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // Inicio panel Buscar
         JPanel panelBuscar = new JPanel();
         panelBuscar.setLayout(new BoxLayout(panelBuscar, BoxLayout.Y_AXIS));
         panelBuscar.setBorder(BorderFactory.createTitledBorder("Buscar"));
+
+        supervisorAdminPanel.setLayout(new BoxLayout(supervisorAdminPanel, BoxLayout.Y_AXIS));
 
         JLabel labelBienvenido = new JLabel("Bienvenido, utilice los campos para buscar una producto:");
         txtProductoNombre.setBorder(BorderFactory.createTitledBorder("Nombre"));
@@ -191,38 +211,104 @@ public class PanelUsuario extends JPanel implements PanelYara {
         mainConstraints.gridx = 3;
         mainConstraints.gridy = 0;
         mainConstraints.gridwidth = 2;
-        mainConstraints.weightx = 1;
+        //mainConstraints.weightx = 1;
         this.add(panelOperaciones, mainConstraints);
+        mainConstraints.gridx = 5;
+        mainConstraints.gridy = 0;
+        mainConstraints.gridwidth = 2;
+        this.add(supervisorAdminPanel);
+    }
+
+    private void crearControlesSupervisor() {
+        JPanel panelSupervisor = new JPanel();
+        supervisorAdminPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panelSupervisor.setBorder(BorderFactory.createTitledBorder("Opciones De Supervisor"));
+        panelSupervisor.setLayout(new GridLayout(0,2));
+        panelSupervisor.add(btnSuperCrearAnaquel);
+        panelSupervisor.add(btnSuperCrearProveedor);
+        panelSupervisor.add(btnSuperCrearCategoria);
+        panelSupervisor.add(btnSuperEliminarAnaquel);
+        panelSupervisor.add(btnSuperEliminarProveedor);
+        panelSupervisor.add(btnSuperEliminarCategoria);
+        mainConstraints.fill = GridBagConstraints.VERTICAL;
+        mainConstraints.gridx = 6;
+        mainConstraints.gridy = 0;
+        mainConstraints.gridwidth = 2;
+        //mainConstraints.weightx = 1;
+        supervisorAdminPanel.add(panelSupervisor);
+        this.frame.pack();
+    }
+
+    private void crearControlesAdmin() {
+        JPanel panelAdmin = new JPanel();
+        supervisorAdminPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panelAdmin.setBorder(BorderFactory.createTitledBorder("Opciones De Administrador"));
+        panelAdmin.setLayout(new GridLayout(0, 2));
+        panelAdmin.add(btnAdminCrearUsuario);
+        panelAdmin.add(btnAdminCrearSucursal);
+        panelAdmin.add(btnAdminEliminarUsuario);
+        panelAdmin.add(btnAdminResetCredenciales);
+        panelAdmin.add(btnAdminEliminarSucursal);
+        mainConstraints.fill = GridBagConstraints.VERTICAL;
+        mainConstraints.gridx = 6;
+        mainConstraints.gridy = 2;
+        mainConstraints.gridwidth = 2;
+        mainConstraints.weighty = 1;
+        supervisorAdminPanel.add(panelAdmin);
+        this.frame.pack();
     }
 
     @Override
     public void crearEventos() {
 
         btnLogin.addActionListener(e -> {
-            if(Objects.equals(btnLogin.getText(), "Login")) {
-                PanelLogin ventanaLogin = new PanelLogin(this.frame);
-                ventanaLogin.setVisible(true);
-                if (ventanaLogin.loginCorrecto()) {
-                    btnLogin.setText("Hola " + ventanaLogin.getUsername() + "!");
-                    lockUI(false);
-                    btnLogin.setForeground(Color.BLACK);
-                    btnLogin.setBackground(Color.GREEN);
-                    btnLogin.setText("Cerrar Sesión");
-                    labelUsuarioNombre.setText("Nombre: Juan Luis Satalaya");
-                    labelUsuarioRol.setText("Rol: Usuario Regular");
-                    labelUsuarioFecha.setText("Login: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-                } else {
-                    lockUI(true);
-                }
-            }else {
-                btnLogin.setText("Login");
-                btnLogin.setForeground(Color.WHITE);
-                btnLogin.setBackground(Color.RED);
-                lockUI(true);
+            activateUserUI();
+            System.out.println("login from userpanel");
+        });
+        btnProductoBuscar.addActionListener(e -> {
+            String nombre = txtProductoNombre.getText();
+            if(!nombre.isEmpty()) {
+                ProductoDaoImpl productoDao = new ProductoDaoImpl();
+                productoDao.findByName(txtProductoNombre.getText());
+                System.out.println("buscando productos con nombre '" + nombre + "' en la base de datos");
             }
         });
 
+    }
 
+    protected void activateUserUI() {
+        if (Objects.equals(btnLogin.getText(), "Login")) {
+            PanelLogin ventanaLogin = new PanelLogin(this.frame);
+            ventanaLogin.setVisible(true);
+            if (ventanaLogin.loginCorrecto()) {
+                btnLogin.setText("Hola " + ventanaLogin.getUsername() + "!");
+                lockUI(false);
+                btnLogin.setForeground(Color.BLACK);
+                btnLogin.setBackground(Color.GREEN);
+                btnLogin.setText("Cerrar Sesión");
+                labelUsuarioNombre.setText("Nombre: Juan Luis Satalaya");
+                if (ventanaLogin.userCorrecto()) {
+                    labelUsuarioRol.setText("Rol: USUARIO");
+                }
+                if (ventanaLogin.adminCorrecto()) {
+                    labelUsuarioRol.setText("Rol: ADMINISTRADOR");
+                    crearControlesSupervisor();
+                    crearControlesAdmin();
+                }
+                if (ventanaLogin.supervisorCorrecto()) {
+                    labelUsuarioRol.setText("Rol: SUPERVISOR");
+                    crearControlesSupervisor();
+                }
+                labelUsuarioFecha.setText("Login: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            } else {
+                lockUI(true);
+            }
+        } else {
+            btnLogin.setText("Login");
+            btnLogin.setForeground(Color.WHITE);
+            btnLogin.setBackground(Color.RED);
+            lockUI(true);
+        }
     }
 
     @Override
@@ -240,7 +326,7 @@ public class PanelUsuario extends JPanel implements PanelYara {
 
     }
 
-    private void lockUI(boolean lock) {
+    protected void lockUI(boolean lock) {
         btnProductoBuscar.setEnabled(!lock);
         btnRegistrarEntrada.setEnabled(!lock);
         btnRegistrarSalida.setEnabled(!lock);

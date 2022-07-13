@@ -9,11 +9,5 @@ Q
 +src/main/java/dao/impl/EmpleadoDaoImpl.java,5/f/5f7fd2b67a149add1070cc6db9185a4724303340
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-R
-"src/main/java/view/PanelLogin.java,e\a\ea1bfab503e4731bef770a77f77f8ad5d1ec5c59
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 a
 1src/main/java/dao/impl/RegistroAccesoDaoImpl.java,d\2\d26906de145ca95a13342de4f802673e512af1ca
-P
- src/main/java/YaraAppWindow.java,3\0\30d459d2e5d064bffee855c49f6f8f7dda55b542
