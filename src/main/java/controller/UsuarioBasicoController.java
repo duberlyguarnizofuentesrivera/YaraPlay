@@ -1,8 +1,22 @@
 package controller;
 
+import dao.impl.ProductoDaoImpl;
+import dao.impl.RegistroAccesoDaoImpl;
+import model.Empleado;
+import model.Producto;
+import model.RegistroAcceso;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class UsuarioBasicoController {
+    Empleado empleado = new Empleado();
+    RegistroAcceso registroAcceso = new RegistroAcceso();
+    ProductoDaoImpl productoDao = new ProductoDaoImpl();
+
     public void ingresarProductos() {
         System.out.println("Ingresar productos");
     }
@@ -12,21 +26,36 @@ public class UsuarioBasicoController {
     }
 
     public void registrarAccesoSistema() {
-        System.out.println("Registrar acceso");
+        registroAcceso.setFechaLogin(LocalDateTime.now());
+        empleado.setRegistroAcceso(registroAcceso);
     }
 
     public void registrarSalidaSistema() {
-        System.out.println("Registrar salida");
+        registroAcceso.setFechaLogout(LocalDateTime.now());
+        RegistroAccesoDaoImpl registroAccesoDao = new RegistroAccesoDaoImpl();
+        empleado.setRegistroAcceso(registroAcceso);
+        registroAccesoDao.save(registroAcceso);
     }
 
     public String verificarStockProducto(int producto, LocalDateTime desde, LocalDateTime hasta) {
-        System.out.println("verificar stock");
-        return null;
+        AtomicInteger stock = new AtomicInteger();
+        List<Producto> productos = productoDao.getAll();
+        for (Producto producto1 : productos) {
+            if (Objects.equals(producto1.getId(), producto)) {
+                stock.set(producto1.getStock());
+            }
+        }
+        return String.valueOf(stock);
     }
 
     public String verificarStockCategoria(int categoria, LocalDateTime desde, LocalDateTime hasta) {
-        System.out.println("verificar stock");
-        return null;
+        AtomicInteger stock = new AtomicInteger();
+        productoDao.getAll().forEach(producto -> {
+            if (Objects.equals(producto.getCategoria().getId(), categoria)) {
+                stock.addAndGet(producto.getStock());
+            }
+        });
+        return String.valueOf(stock);
     }
 
     public String[] verificarRegistrosSalidasProductos(int producto, LocalDateTime desde, LocalDateTime hasta) {
@@ -45,15 +74,27 @@ public class UsuarioBasicoController {
     }
 
     public String verificarProductosMalEstado() {
-        System.out.println("verificar productos mal estado");
-        return null;
+        List<String> productos = new ArrayList<>();
+        productoDao.getAll().forEach(producto -> {
+            if (Objects.equals(producto.getEstado(), "MAL ESTADO")) {
+                productos.add(producto.getNombre() + " " + producto.getStock());
+            }
+        });
+        return productos.toString();
     }
 
-    public String verificarLocalizacionProductos(int[] producto) {
+    public String verificarLocalizacionProductos(long producto) {
+        String resultado = "";
+
+        List<Producto> productos = productoDao.getAll();
+        for (Producto prod : productos) {
+            if (prod.getId() == producto) {
+                resultado = prod.getAnaquel().getPiso() + " - "
+                        + prod.getAnaquel().getPasillo() + " - "
+                        + prod.getAnaquel().getNivel();
+            }
+        }
         System.out.println("verificar localizacion productos");
-        return null;
+        return resultado;
     }
-
-
-
 }

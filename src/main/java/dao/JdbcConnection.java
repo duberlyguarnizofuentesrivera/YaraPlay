@@ -14,7 +14,7 @@ public class JdbcConnection {
     Statement statement;
 
     private Connection connect() {
-        String url = "jdbc:mysql://localhost:3306/yaraplay";
+        String url = "jdbc:mysql://localhost/yaraplay";
         String userName = "yaraplay";
         String password = "yara";
         log.info("conectando a la base de datos");

@@ -3,6 +3,9 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class PanelUsuario extends JPanel implements PanelYara {
     private final JTextField txtProductoNombre = new JTextField();
@@ -11,11 +14,19 @@ public class PanelUsuario extends JPanel implements PanelYara {
     private final JTextField txtProductoCategoria = new JTextField();
     private final JTextField txtProductoProveedor = new JTextField();
     private final JButton btnProductoBuscar = new JButton("Buscar");
+    private final JButton btnProductoStock = new JButton("Stock de producto");
+    private final JButton btnCategoriaStock = new JButton("Stock de categoría");
     private final JButton btnRegistrarEntrada = new JButton("Registrar Entrada");
     private final JButton btnRegistrarSalida = new JButton("Registrar Salida");
+    private final JButton btnRevisarRegistros = new JButton("Revisar Registros");
     private final JButton btnAgregarProducto = new JButton("Agregar Producto");
     private final JButton btnEliminarProducto = new JButton("Eliminar Producto");
+    JButton btnVerificarProductosMalEstado = new JButton("Ver productos por vencer");
     private final JButton btnLogin = new JButton("Login");
+
+    JLabel labelUsuarioNombre = new JLabel("Nombre: (inicie sesión)");
+    JLabel labelUsuarioRol = new JLabel("Rol: (inicie sesión)");
+    JLabel labelUsuarioFecha = new JLabel("Login: --/--/--");
     JFrame frame;
 
     public PanelUsuario(JFrame frame) {
@@ -45,10 +56,9 @@ public class PanelUsuario extends JPanel implements PanelYara {
         txtProductoCategoria.setBorder(BorderFactory.createTitledBorder("Categoria"));
         txtProductoEstado.setBorder(BorderFactory.createTitledBorder("Estado"));
         txtProductoProveedor.setBorder(BorderFactory.createTitledBorder("Proveedor"));
-        btnProductoBuscar.setMargin(new Insets(10, 0, 10, 0));
-        btnProductoBuscar.setMaximumSize(new Dimension(150, 30));
+
         JTextArea txtResultados = new JTextArea(10, 25);
-        txtResultados.setEditable(false);
+        //txtResultados.setEditable(false);
         txtResultados.setBorder(BorderFactory.createTitledBorder("Resultados"));
 
         JPanel panelBuscarControles = new JPanel();
@@ -56,15 +66,19 @@ public class PanelUsuario extends JPanel implements PanelYara {
         panelBuscarControles.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panelBuscarControles.add(labelBienvenido);
         panelBuscarControles.add(txtProductoNombre);
-        panelBuscarControles.add(txtProductoAnaquel);
         panelBuscarControles.add(txtProductoCategoria);
+        panelBuscarControles.add(txtProductoAnaquel);
         panelBuscarControles.add(txtProductoEstado);
         panelBuscarControles.add(txtProductoProveedor);
 
         JPanel panelBuscarBotones = new JPanel();
-        panelBuscarBotones.setLayout(new BoxLayout(panelBuscarBotones, BoxLayout.Y_AXIS));
+        panelBuscarBotones.setLayout(new BoxLayout(panelBuscarBotones, BoxLayout.X_AXIS));
         panelBuscarBotones.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panelBuscarBotones.add(btnProductoBuscar);
+        panelBuscarBotones.add(Box.createRigidArea(new Dimension(5, 0)));
+        panelBuscarBotones.add(btnProductoStock);
+        panelBuscarBotones.add(Box.createRigidArea(new Dimension(5, 0)));
+        panelBuscarBotones.add(btnCategoriaStock);
         JPanel panelBuscarResultados = new JPanel();
         panelBuscarResultados.setLayout(new BoxLayout(panelBuscarResultados, BoxLayout.Y_AXIS));
         panelBuscarResultados.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -74,7 +88,7 @@ public class PanelUsuario extends JPanel implements PanelYara {
         panelBuscar.add(panelBuscarBotones);
         panelBuscar.add(panelBuscarResultados);
         // Fin panel Buscar
-        GridLayout gridLayout = new GridLayout(3, 1);
+        GridLayout gridLayout = new GridLayout(4, 1);
         gridLayout.setVgap(15);
         gridLayout.setHgap(20);
 
@@ -86,11 +100,9 @@ public class PanelUsuario extends JPanel implements PanelYara {
         panelDatosUsuario.setLayout(new GridBagLayout());
         GridBagConstraints currentUserConstraints = new GridBagConstraints();
         panelDatosUsuario.setBorder(BorderFactory.createTitledBorder("Usuario Actual"));
-        JLabel labelUsuario = new JLabel("Modo de Usuario: Usuario");
-        JLabel labelUsuarioNombre = new JLabel("Nombre: Juan Luis Satalaya Vladivieso");
-        JLabel labelUsuarioRol = new JLabel("Rol: Administrador");
-        JLabel labelUsuarioFecha = new JLabel("Login: 01/01/2019");
         btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnLogin.setBackground(Color.RED);
+        btnLogin.setForeground(Color.WHITE);
         currentUserConstraints.fill = GridBagConstraints.VERTICAL;
         currentUserConstraints.gridy = 0;
         panelDatosUsuario.add(labelUsuarioNombre, currentUserConstraints);
@@ -119,12 +131,12 @@ public class PanelUsuario extends JPanel implements PanelYara {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         panelEntradaSalida.add(btnRegistrarEntrada, constraints);
         constraints.gridx = 0;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
-
         constraints.fill = GridBagConstraints.HORIZONTAL;
         panelEntradaSalida.add(btnRegistrarSalida, constraints);
+        panelEntradaSalida.add(btnRevisarRegistros);
         // Fin panel Registrar Entradas/Salidas
 
         // Inicio panel Agregar/Eliminar Productos
@@ -151,9 +163,26 @@ public class PanelUsuario extends JPanel implements PanelYara {
         panelAgregarEliminarProducto.add(btnEliminarProducto, constraints);
         // Fin panel Agregar/Eliminar Productos
 
+        //Inicio panel Otras opciones
+        JPanel panelOtrasOpciones = new JPanel();
+        panelOtrasOpciones.setLayout(new GridBagLayout());
+        GridBagConstraints constraintsOtrasOpciones = new GridBagConstraints();
+        panelOtrasOpciones.setBorder(BorderFactory.createTitledBorder("Otras Opciones"));
+        btnVerificarProductosMalEstado.setAlignmentX(Component.CENTER_ALIGNMENT);
+        constraintsOtrasOpciones.insets = new Insets(10, 10, 5, 10);
+        constraintsOtrasOpciones.gridx = 0;
+        constraintsOtrasOpciones.gridy = 0;
+        constraintsOtrasOpciones.gridwidth = 1;
+        constraintsOtrasOpciones.gridheight = 1;
+        constraintsOtrasOpciones.fill = GridBagConstraints.HORIZONTAL;
+        panelOtrasOpciones.add(btnVerificarProductosMalEstado, constraintsOtrasOpciones);
+
+        //Fin panel Otras opciones
+
         panelOperaciones.add(panelDatosUsuario);
         panelOperaciones.add(panelEntradaSalida);
         panelOperaciones.add(panelAgregarEliminarProducto);
+        panelOperaciones.add(panelOtrasOpciones);
         mainConstraints.fill = GridBagConstraints.HORIZONTAL;
         mainConstraints.gridx = 0;
         mainConstraints.gridy = 0;
@@ -170,12 +199,25 @@ public class PanelUsuario extends JPanel implements PanelYara {
     public void crearEventos() {
 
         btnLogin.addActionListener(e -> {
-            PanelLogin ventanaLogin = new PanelLogin(this.frame);
-            ventanaLogin.setVisible(true);
-            if (ventanaLogin.loginCorrecto()) {
-                btnLogin.setText("Hola " + ventanaLogin.getUsername() + "!");
-                lockUI(false);
-            } else {
+            if(Objects.equals(btnLogin.getText(), "Login")) {
+                PanelLogin ventanaLogin = new PanelLogin(this.frame);
+                ventanaLogin.setVisible(true);
+                if (ventanaLogin.loginCorrecto()) {
+                    btnLogin.setText("Hola " + ventanaLogin.getUsername() + "!");
+                    lockUI(false);
+                    btnLogin.setForeground(Color.BLACK);
+                    btnLogin.setBackground(Color.GREEN);
+                    btnLogin.setText("Cerrar Sesión");
+                    labelUsuarioNombre.setText("Nombre: Juan Luis Satalaya");
+                    labelUsuarioRol.setText("Rol: Usuario Regular");
+                    labelUsuarioFecha.setText("Login: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                } else {
+                    lockUI(true);
+                }
+            }else {
+                btnLogin.setText("Login");
+                btnLogin.setForeground(Color.WHITE);
+                btnLogin.setBackground(Color.RED);
                 lockUI(true);
             }
         });
@@ -204,11 +246,14 @@ public class PanelUsuario extends JPanel implements PanelYara {
         btnRegistrarSalida.setEnabled(!lock);
         btnAgregarProducto.setEnabled(!lock);
         btnEliminarProducto.setEnabled(!lock);
+        btnProductoStock.setEnabled(!lock);
+        btnCategoriaStock.setEnabled(!lock);
+        btnRevisarRegistros.setEnabled(!lock);
+        btnVerificarProductosMalEstado.setEnabled(!lock);
         txtProductoAnaquel.setEnabled(!lock);
         txtProductoCategoria.setEnabled(!lock);
         txtProductoNombre.setEnabled(!lock);
         txtProductoEstado.setEnabled(!lock);
         txtProductoProveedor.setEnabled(!lock);
-
     }
 }

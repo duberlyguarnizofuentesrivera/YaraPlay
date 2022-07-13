@@ -1,43 +1,19 @@
 
-e
-5src/main/java/controller/UsuarioBasicoController.java,c/c/ccc6d9362f71def13351ea9e9e8b0e9b02ee9dd2
 b
 2src/main/java/controller/AlmaceneroController.java,3/3/3355f799203408c5e5f7864198ac7298ed8a8aa7
 ]
 -src/main/java/controller/AdminController.java,c/f/cf3e40cc91b027c4280d6e139162e74b787b94b8
-7
-pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
-w
-G.idea/sonarlint/issuestore/9/5/9560a1c4a66c87090cfd0c261bcd9453be43bd82,6/1/610fb0bd50c97f37b9844acfea7f5b4f610a494a
-P
- src/main/java/model/Anaquel.java,6/7/67b8ddb0f66a3d4cfcf69e948589ed4b21ac2294
-R
-"src/main/java/model/Categoria.java,8/e/8e117a6ac2f06fd67126ef66c456d68142d986c9
-Q
-!src/main/java/model/Sucursal.java,6/5/65294a82e1714d6da7e45d8df30de568da77a544
-P
- src/main/java/model/Persona.java,4/4/44e7638b50a8bcb3973ae81ea73ed72ca71bbade
-a
-1src/main/java/model/ProductoRegistroIngresos.java,f/6/f654c40f912469afc76bbda5818c89a91bea42e4
-L
-src/main/java/model/Rol.java,8/6/868530e5d6c60bd762ec0bffb49cb34b859fe11b
-Y
-)src/main/java/model/RegistroIngresos.java,1/c/1c434b23b89bdb91f5a57136dc564df1246c052c
-W
-'src/main/java/model/RegistroAcceso.java,d/e/de87829fd90d0e8a5546eb29096752ea5078e502
-X
-(src/main/java/model/RegistroSalidas.java,a/f/af8881c63826e65888788466f12d79e12a2882d9
-Q
-!src/main/java/model/Empleado.java,f/1/f144442e4cff5e569a5b677d8755f129a7c4fae9
 Q
 !src/main/java/model/Producto.java,8/2/82d4d0c5b7a28279e35e6a9db28f55de7ad2053c
-Z
-*src/main/java/dao/impl/AnaquelDaoImpl.java,2/c/2cf68219e8d0929013db7daf1bd7c276b35172c2
-\
-,src/main/java/dao/impl/CategoriaDaoImpl.java,2/c/2c17df916d4a2d65bcec2ec5013401bec2a782fa
 [
 +src/main/java/dao/impl/EmpleadoDaoImpl.java,5/f/5f7fd2b67a149add1070cc6db9185a4724303340
-U
-%src/main/java/dao/JdbcConnection.java,d/c/dc58c4777111e8a2e23f7775503982e5658e402d
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 R
-"src/main/java/model/Proveedor.java,a/d/ad72aba8294493d68064b8f5d71ffa9330ad01e5
+"src/main/java/view/PanelLogin.java,e\a\ea1bfab503e4731bef770a77f77f8ad5d1ec5c59
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+a
+1src/main/java/dao/impl/RegistroAccesoDaoImpl.java,d\2\d26906de145ca95a13342de4f802673e512af1ca
+P
+ src/main/java/YaraAppWindow.java,3\0\30d459d2e5d064bffee855c49f6f8f7dda55b542
