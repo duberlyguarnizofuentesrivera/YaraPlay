@@ -45,17 +45,24 @@ public class PanelUsuario extends JPanel implements PanelYara {
     JButton btnSuperEliminarAnaquel = new JButton("Eliminar Anaquel");
     JButton btnSuperEliminarProveedor = new JButton("Eliminar Proveedor");
     JButton btnSuperEliminarCategoria = new JButton("Eliminar Categoría");
+    JButton btnSuperVerAnaqueles = new JButton("Ver Anaqueles");
+    JButton btnSuperVerProveedores = new JButton("Ver Proveedores");
+    JButton btnSuperVerCategorias = new JButton("Ver Categorías");
     //----Controles de panel admin---------------
     JButton btnAdminCrearUsuario = new JButton("Crear Usuario");
     JButton btnAdminEliminarUsuario = new JButton("Eliminar Usuario");
     JButton btnAdminResetCredenciales = new JButton("Resetear Credenciales");
     JButton btnAdminCrearSucursal = new JButton("Crear Sucursal");
     JButton btnAdminEliminarSucursal = new JButton("Eliminar Sucursal");
+    JButton btnAdminVerUsuarios = new JButton("Ver Usuarios");
+    JButton btnAdminVerSucursales = new JButton("Ver Sucursales");
+
     JFrame frame;
     JTabbedPane tabs = new JTabbedPane();
     GridBagConstraints mainConstraints = new GridBagConstraints();
 
     PanelSupervisor Supervisor = new PanelSupervisor(this);
+    PanelAdmin Admin = new PanelAdmin(this);
 
     public PanelUsuario(JFrame frame) {
         super();
@@ -242,7 +249,7 @@ public class PanelUsuario extends JPanel implements PanelYara {
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperCrearProveedor, constraints);
+        panelSupervisor.add(btnSuperEliminarAnaquel, constraints);
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
@@ -250,15 +257,27 @@ public class PanelUsuario extends JPanel implements PanelYara {
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperEliminarAnaquel, constraints);
+        panelSupervisor.add(btnSuperEliminarCategoria, constraints);
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperEliminarProveedor, constraints);
+        panelSupervisor.add(btnSuperCrearProveedor, constraints);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperEliminarCategoria, constraints);
+        panelSupervisor.add(btnSuperEliminarProveedor, constraints);
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 1;
+        panelSupervisor.add(btnSuperVerAnaqueles, constraints);
+        constraints.gridx = 1;
+        constraints.gridy = 3;
+        constraints.gridwidth = 1;
+        panelSupervisor.add(btnSuperVerCategorias, constraints);
+        constraints.gridx = 2;
+        constraints.gridy = 3;
+        constraints.gridwidth = 1;
+        panelSupervisor.add(btnSuperVerProveedores, constraints);
         tabs.addTab("Supervisión", panelSupervisor);
         Supervisor.crearEventos();
     }
@@ -267,31 +286,46 @@ public class PanelUsuario extends JPanel implements PanelYara {
         JPanel panelAdmin = new JPanel();
         panelAdmin.setBorder(BorderFactory.createTitledBorder("Opciones De Administrador"));
         panelAdmin.setLayout(new GridBagLayout());
+        btnAdminEliminarSucursal.setBackground(Color.RED);
+        btnAdminEliminarSucursal.setForeground(Color.WHITE);
+        btnAdminEliminarUsuario.setBackground(Color.RED);
+        btnAdminEliminarUsuario.setForeground(Color.WHITE);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(10, 10, 5, 10);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminCrearUsuario, constraints);
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminCrearSucursal, constraints);
-        constraints.gridx = 2;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminEliminarUsuario, constraints);
+        panelAdmin.add(btnAdminVerUsuarios, constraints);
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminResetCredenciales, constraints);
+        panelAdmin.add(btnAdminCrearUsuario, constraints);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        panelAdmin.add(btnAdminEliminarUsuario, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        panelAdmin.add(btnAdminVerSucursales, constraints);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
+        panelAdmin.add(btnAdminCrearSucursal, constraints);
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
         panelAdmin.add(btnAdminEliminarSucursal, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        panelAdmin.add(btnAdminResetCredenciales, constraints);
         tabs.addTab("Administración", panelAdmin);
         this.frame.pack();
+        Admin.crearEventos();
     }
 
     @Override

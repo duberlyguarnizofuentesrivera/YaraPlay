@@ -20,6 +20,7 @@ public class YaraAppWindow {
             frame.setSize(800, 600);
             panelUsuario = new PanelUsuario(frame);
             frame.setContentPane(panelUsuario);
+            frame.setLocationRelativeTo(null);
             frame.pack();
             frame.setVisible(true);
         });
