@@ -1,5 +1,4 @@
-import com.github.weisj.darklaf.LafManager;
-import com.github.weisj.darklaf.theme.SolarizedLightTheme;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import view.PanelAdmin;
 import view.PanelSupervisor;
 import view.PanelUsuario;
@@ -11,7 +10,7 @@ public class YaraAppWindow {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            LafManager.install(new SolarizedLightTheme());
+            FlatIntelliJLaf.setup();
             PanelAdmin panelAdmin;
             PanelSupervisor panelSupervisor;
             PanelUsuario panelUsuario;

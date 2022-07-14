@@ -43,7 +43,18 @@ public class ProductoDaoImpl implements Dao<Producto> {
                 + ")";
         jdbcConnection.executeUpdate(query);
     }
-
+    public void saveBasic(Producto producto) {
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        producto.setStock(0);
+        producto.setEstado("ok");
+        String query = "INSERT INTO producto ( categoria_id, proveedor_id, nombre, estado, stock) VALUES ("
+                + producto.getCategoria().getId() + ", "
+                + producto.getProveedor().getId() + ", '"
+                + producto.getNombre() + "', '"
+                + producto.getEstado() + "', "
+                + producto.getStock() + ")";
+        jdbcConnection.executeUpdate(query);
+    }
     @Override
     public void update(Producto producto, String[] params) {
 
@@ -117,7 +128,7 @@ public class ProductoDaoImpl implements Dao<Producto> {
         estadoQuery = "producto.estado LIKE '%" + estado + "%'";
         proveedorQuery = "proveedor.razonsocial LIKE '%" + proveedor_name + "%'";
 
-        String query = "SELECT producto.nombre, categoria.nombre, proveedor.razonsocial, anaquel.id, producto.estado"
+        String query = "SELECT producto.id, producto.nombre, categoria.nombre, proveedor.razonsocial, anaquel.id, producto.estado"
                 + " FROM producto"
                 + " INNER JOIN categoria ON producto.categoria_id = categoria.id"
                 + " INNER JOIN proveedor ON producto.proveedor_id = proveedor.id"
