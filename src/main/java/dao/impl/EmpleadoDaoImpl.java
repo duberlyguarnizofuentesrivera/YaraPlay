@@ -34,13 +34,20 @@ public class EmpleadoDaoImpl implements Dao<Empleado> {
     @Override
     public void save(Empleado empleado) {
         JdbcConnection jdbcConnection = new JdbcConnection();
-        String query = "INSERT INTO empleado (id, rol_id, persona_id, registro_acceso_id, registro_ingresos_id, registro_salidas_id) VALUES ("
-                + empleado.getId() + ", "
+        String query = "INSERT INTO empleado ( rol_id, persona_id, registro_acceso_id, registro_ingresos_id, registro_salidas_id) VALUES ("
                 + empleado.getRol().getId() + ", "
                 + empleado.getPersona().getId() + ", "
                 + empleado.getRegistroAcceso().getId() + ", "
                 + empleado.getRegistroIngresos().getId() + ", "
                 + empleado.getRegistroSalidas().getId() + ")";
+        jdbcConnection.executeUpdate(query);
+    }
+
+    public void saveBasics(Empleado empleado) {
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String query = "INSERT INTO empleado (rol_id, persona_id) VALUES ("
+                + empleado.getRol().getId() + ", "
+                + empleado.getPersona().getId() + ")";
         jdbcConnection.executeUpdate(query);
     }
 

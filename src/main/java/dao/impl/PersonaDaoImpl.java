@@ -29,6 +29,13 @@ public class PersonaDaoImpl implements Dao<Persona> {
         convertToPersona(personas, resultados);
         return personas;
     }
+    public Persona getByDni(String dni) {
+        List<Persona> personas = new ArrayList<>();
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        List<String[]> resultados = jdbcConnection.executeQuery("SELECT * FROM persona WHERE dni = '" + dni + "'");
+        convertToPersona(personas, resultados);
+        return personas.get(0);
+    }
 
     @Override
     public void save(Persona persona) {
@@ -56,6 +63,7 @@ public class PersonaDaoImpl implements Dao<Persona> {
         String query = "DELETE FROM persona WHERE id = " + persona.getId();
         jdbcConnection.executeUpdate(query);
     }
+
 
     private void convertToPersona(List<Persona> personas, List<String[]> resultados) {
         for (String[] resultado : resultados) {
