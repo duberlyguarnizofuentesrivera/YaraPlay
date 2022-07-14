@@ -55,4 +55,21 @@ public class CategoriaDaoImpl implements Dao<Categoria> {
             categorias.add(categoria);
         }
     }
+
+    public List<Categoria> findByName(String name) {
+        List<Categoria> categorias = new ArrayList<>();
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String query = "SELECT * FROM categoria WHERE nombre LIKE '%" + name + "%'";
+        List<String[]> resultados = jdbcConnection.executeQuery(query);
+        convertToCategoria(categorias, resultados);
+        return categorias;
+    }
+
+    public String getStock(long id) {
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String query = "SELECT SUM(stock) FROM producto WHERE producto.categoria_id = " + id;
+        List<String[]> resultados = jdbcConnection.executeQuery(query);
+        System.out.println("obteniendo stock de categoría. Total: " + resultados.get(0)[0]);
+        return resultados.get(0)[0];
+    }
 }

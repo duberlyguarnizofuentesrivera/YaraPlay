@@ -1,16 +1,10 @@
 import com.github.weisj.darklaf.LafManager;
-import com.github.weisj.darklaf.theme.DarculaTheme;
 import com.github.weisj.darklaf.theme.SolarizedLightTheme;
-import dao.impl.PersonaDaoImpl;
-import model.Persona;
 import view.PanelAdmin;
 import view.PanelSupervisor;
 import view.PanelUsuario;
 
 import javax.swing.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public class YaraAppWindow {
 
