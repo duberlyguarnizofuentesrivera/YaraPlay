@@ -1,8 +1,17 @@
 package view;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.Objects;
 
 public class PanelSupervisor extends JPanel implements PanelYara {
+    JFrame frame;
+
+
+    public PanelSupervisor(JFrame frame) {
+        super();
+
+    }
 
     @Override
     public void crearControles() {
@@ -11,6 +20,7 @@ public class PanelSupervisor extends JPanel implements PanelYara {
 
     @Override
     public void crearEventos() {
+
 
     }
 
@@ -28,4 +38,6 @@ public class PanelSupervisor extends JPanel implements PanelYara {
     public void leerConfiguracion() {
 
     }
+
+
 }

@@ -2,14 +2,17 @@ package util;
 
 public class Login {
 
-    public static boolean autenticar(String username, String password) {
+    public static int[] autenticar(String username, String password) {
         // hardcoded username and password
         if (username.equals("user") && password.equals("user")) {
-            return true;
+            return new int[]{1, 1};
         }
         if (username.equals("super") && password.equals("super")) {
-            return true;
+            return new int[]{1, 2};
         }
-        return username.equals("admin") && password.equals("admin");
+        if (username.equals("admin") && password.equals("admin")) {
+            return new int[]{1, 3};
+        }
+        return new int[]{0, 0};
     }
 }

@@ -63,13 +63,68 @@ public class ProductoDaoImpl implements Dao<Producto> {
             ProveedorDaoImpl proveedorDao = new ProveedorDaoImpl();
             Producto producto = new Producto();
             producto.setId(Long.parseLong(resultado[0]));
-            producto.setAnaquel(anaquelDao.get(Long.parseLong(resultado[1])).get());
-            producto.setCategoria(categoriaDao.get(Long.parseLong(resultado[2])).get());
-            producto.setProveedor(proveedorDao.get(Long.parseLong(resultado[3])).get());
+            if (resultado[1] != null) {
+                producto.setAnaquel(anaquelDao.get(Long.parseLong(resultado[1])).get());
+            }
+            if (resultado[2] != null) {
+                producto.setCategoria(categoriaDao.get(Long.parseLong(resultado[2])).get());
+            }
+            if (resultado[3] != null) {
+                producto.setProveedor(proveedorDao.get(Long.parseLong(resultado[3])).get());
+            }
             producto.setNombre(resultado[4]);
             producto.setEstado(resultado[5]);
             producto.setStock(Integer.parseInt(resultado[6]));
             productos.add(producto);
         }
+    }
+
+    public List<Producto> findByName(String name) {
+        List<Producto> productos = new ArrayList<>();
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String query = "SELECT * FROM producto WHERE nombre LIKE '%" + name + "%'";
+        List<String[]> resultados = jdbcConnection.executeQuery(query);
+        convertToProducto(productos, resultados);
+        return productos;
+    }
+
+    public String getStock(long id) {
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String query = "SELECT stock FROM producto WHERE id = " + id;
+        List<String[]> resultados = jdbcConnection.executeQuery(query);
+        return resultados.get(0)[0];
+    }
+
+    public List<Producto> listarProductosMalEstado() {
+        List<Producto> productos = new ArrayList<>();
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String query = "SELECT * FROM producto WHERE estado <> 'ok'";
+        List<String[]> resultados = jdbcConnection.executeQuery(query);
+        convertToProducto(productos, resultados);
+        return productos;
+    }
+
+    public List<String[]> findByNameCategoryStateSupplier(String nombre, String categoria_name, String estado, String proveedor_name) {
+        List<Producto> productos = new ArrayList<>();
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String nombreQuery;
+        String categoriaQuery;
+        String estadoQuery;
+        String proveedorQuery;
+
+        nombreQuery = "producto.nombre LIKE '%" + nombre + "%'";
+        categoriaQuery = "categoria.nombre LIKE '%" + categoria_name + "%'";
+        estadoQuery = "producto.estado LIKE '%" + estado + "%'";
+        proveedorQuery = "proveedor.razonsocial LIKE '%" + proveedor_name + "%'";
+
+        String query = "SELECT producto.nombre, categoria.nombre, proveedor.razonsocial, anaquel.id, producto.estado"
+                + " FROM producto"
+                + " INNER JOIN categoria ON producto.categoria_id = categoria.id"
+                + " INNER JOIN proveedor ON producto.proveedor_id = proveedor.id"
+                + " INNER JOIN anaquel ON producto.anaquel_id = anaquel.id"
+                + " WHERE " + nombreQuery + " AND " + categoriaQuery + " AND " + estadoQuery + " AND " + proveedorQuery;
+
+        List<String[]> resultados = jdbcConnection.executeQuery(query);
+        return resultados;
     }
 }
