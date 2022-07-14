@@ -32,14 +32,20 @@ public class ProveedorDaoImpl implements Dao<Proveedor> {
     @Override
     public void save(Proveedor proveedor) {
         JdbcConnection jdbcConnection = new JdbcConnection();
-        String query = "INSERT INTO proveedor (id, persona_id, razon_social, ruc, direccion, telefono) VALUES ("
-                + proveedor.getId() + ", "
-                + proveedor.getPersona().getId() + ", " + "'"
-                + proveedor.getRazonSocial() + "', " + "'"
+        String query = "INSERT INTO proveedor (persona_id, razonsocial, ruc, direccion, telefono) VALUES ("
+                + proveedor.getPersona().getId() + ", '"
+                + proveedor.getRazonSocial() + "', '"
                 + proveedor.getRuc() + "', " + "'"
-                + proveedor.getDireccion() + "', " + "'"
-                + proveedor.getTelefono() + "'"
-                + ")";
+                + proveedor.getDireccion() + "', '"
+                + proveedor.getTelefono() + "')";
+        jdbcConnection.executeUpdate(query);
+    }
+
+    public void saveBasic(Proveedor proveedor) {
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String query = "INSERT INTO proveedor ( razonsocial, ruc) VALUES ('"
+                + proveedor.getRazonSocial() + "', " + "'"
+                + proveedor.getRuc() + "')";
         jdbcConnection.executeUpdate(query);
     }
 
@@ -60,12 +66,27 @@ public class ProveedorDaoImpl implements Dao<Proveedor> {
             PersonaDaoImpl personaDao = new PersonaDaoImpl();
             Proveedor proveedor = new Proveedor();
             proveedor.setId(Long.parseLong(resultado[0]));
-            proveedor.setPersona(personaDao.get(Long.parseLong(resultado[1])).get());
+            if (resultado[1] != null) {
+                proveedor.setPersona(personaDao.get(Long.parseLong(resultado[1])).get());
+            }
             proveedor.setRazonSocial(resultado[2]);
             proveedor.setRuc(resultado[3]);
-            proveedor.setDireccion(resultado[4]);
-            proveedor.setTelefono(resultado[5]);
+            if (resultado[4] != null) {
+                proveedor.setDireccion(resultado[4]);
+            }
+            if (resultado[5] != null) {
+                proveedor.setTelefono(resultado[5]);
+            }
             proveedores.add(proveedor);
         }
+    }
+
+    public List<Proveedor> findByName(String text) {
+        List<Proveedor> proveedores = new ArrayList<>();
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String query = "SELECT * FROM proveedor WHERE razonsocial LIKE '%" + text + "%'";
+        List<String[]> resultados = jdbcConnection.executeQuery(query);
+        convertToProveedor(proveedores, resultados);
+        return proveedores;
     }
 }

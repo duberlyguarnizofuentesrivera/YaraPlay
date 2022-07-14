@@ -9,9 +9,5 @@ public interface PanelYara {
 
     public void crearEventos();
 
-    public void crearLayout();
-
-    public void inicializar();
-
     public void leerConfiguracion();
 }
