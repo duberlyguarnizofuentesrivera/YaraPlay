@@ -5,9 +5,9 @@ import util.Configuracion;
 public interface PanelYara {
     Configuracion configuracion = new Configuracion();
 
-    public void crearControles();
+    void crearControles();
 
-    public void crearEventos();
+    void crearEventos();
 
-    public void leerConfiguracion();
+    void leerConfiguracion();
 }

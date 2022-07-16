@@ -72,11 +72,11 @@ public class EmpleadoDaoImpl implements Dao<Empleado> {
             RegistroSalidasDaoImpl registroSalidasDao = new RegistroSalidasDaoImpl();
             Empleado empleado = new Empleado();
             empleado.setId(Long.parseLong(resultado[0]));
-            empleado.setRol(rolDao.get(Long.parseLong(resultado[1])).get());
-            empleado.setPersona(personaDao.get(Long.parseLong(resultado[2])).get());
-            empleado.setRegistroAcceso(registroAccesoDao.get(Long.parseLong(resultado[3])).get());
-            empleado.setRegistroIngresos(registroIngresosDao.get(Long.parseLong(resultado[4])).get());
-            empleado.setRegistroSalidas(registroSalidasDao.get(Long.parseLong(resultado[5])).get());
+            empleado.setRol(rolDao.get(Long.parseLong(resultado[1])).orElse(null));
+            empleado.setPersona(personaDao.get(Long.parseLong(resultado[2])).orElse(null));
+            empleado.setRegistroAcceso(registroAccesoDao.get(Long.parseLong(resultado[3])).orElse(null));
+            empleado.setRegistroIngresos(registroIngresosDao.get(Long.parseLong(resultado[4])).orElse(null));
+            empleado.setRegistroSalidas(registroSalidasDao.get(Long.parseLong(resultado[5])).orElse(null));
             empleados.add(empleado);
         }
     }

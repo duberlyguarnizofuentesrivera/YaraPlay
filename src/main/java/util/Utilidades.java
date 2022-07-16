@@ -11,6 +11,6 @@ public class Utilidades {
     }
 
     public void validarConfiguracion() {
-        System.out.println("Validar configuracion");
+        System.out.println("Validar configuración");
     }
 }

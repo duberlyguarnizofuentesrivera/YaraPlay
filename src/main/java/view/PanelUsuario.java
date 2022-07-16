@@ -1,12 +1,6 @@
 package view;
 
-
-import dao.impl.CategoriaDaoImpl;
-import dao.impl.ProductoDaoImpl;
-import dao.impl.ProveedorDaoImpl;
-import model.Categoria;
-import model.Producto;
-import model.Proveedor;
+import controller.UsuarioBasicoController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,7 +8,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Objects;
 
 public class PanelUsuario extends JPanel implements PanelYara {
@@ -22,7 +15,8 @@ public class PanelUsuario extends JPanel implements PanelYara {
     private final JTextField txtProductoEstado = new JTextField();
     private final JTextField txtProductoCategoria = new JTextField();
     private final JTextField txtProductoProveedor = new JTextField();
-    JTable txtResultados = new JTable();
+    final JTable txtResultados = new JTable();
+    final JLabel lblResultados = new JLabel();
     private final JButton btnProductoBuscar = new JButton("Buscar");
     private final JButton btnProductoStock = new JButton("Stock de producto");
     private final JButton btnCategoriaStock = new JButton("Stock de categoría");
@@ -31,38 +25,41 @@ public class PanelUsuario extends JPanel implements PanelYara {
     private final JButton btnRevisarRegistros = new JButton("Revisar Registros");
     private final JButton btnAgregarProducto = new JButton("Agregar Producto");
     private final JButton btnEliminarProducto = new JButton("Eliminar Producto");
-    JButton btnVerificarProductosMalEstado = new JButton("Ver productos por vencer");
+    final JButton btnVerificarProductosMalEstado = new JButton("Ver productos por vencer");
     final JButton btnLogin = new JButton("Login");
 
-    JLabel labelUsuarioNombre = new JLabel("Nombre: (inicie sesión)");
-    JLabel labelUsuarioRol = new JLabel("Rol: (inicie sesión)");
-    JLabel labelUsuarioFecha = new JLabel("Login: --/--/--");
+    final JLabel labelUsuarioNombre = new JLabel("Nombre: (inicie sesión)");
+    final JLabel labelUsuarioRol = new JLabel("Rol: (inicie sesión)");
+    final JLabel labelUsuarioFecha = new JLabel("Login: --/--/--");
 
     //----Controles de panel supervisor---------------
-    JButton btnSuperCrearAnaquel = new JButton("Crear Anaquel");
-    JButton btnSuperCrearProveedor = new JButton("Crear Proveedor");
-    JButton btnSuperCrearCategoria = new JButton("Crear Categoría");
-    JButton btnSuperEliminarAnaquel = new JButton("Eliminar Anaquel");
-    JButton btnSuperEliminarProveedor = new JButton("Eliminar Proveedor");
-    JButton btnSuperEliminarCategoria = new JButton("Eliminar Categoría");
-    JButton btnSuperVerAnaqueles = new JButton("Ver Anaqueles");
-    JButton btnSuperVerProveedores = new JButton("Ver Proveedores");
-    JButton btnSuperVerCategorias = new JButton("Ver Categorías");
+    final JButton btnSuperCrearAnaquel = new JButton("Crear Anaquel");
+    final JButton btnSuperCrearProveedor = new JButton("Crear Proveedor");
+    final JButton btnSuperCrearCategoria = new JButton("Crear Categoría");
+    final JButton btnSuperEliminarAnaquel = new JButton("Eliminar Anaquel");
+    final JButton btnSuperEliminarProveedor = new JButton("Eliminar Proveedor");
+    final JButton btnSuperEliminarCategoria = new JButton("Eliminar Categoría");
+    final JButton btnSuperVerAnaqueles = new JButton("Ver Anaqueles");
+    final JButton btnSuperVerProveedores = new JButton("Ver Proveedores");
+    final JButton btnSuperVerCategorias = new JButton("Ver Categorías");
     //----Controles de panel admin---------------
-    JButton btnAdminCrearUsuario = new JButton("Crear Usuario");
-    JButton btnAdminEliminarUsuario = new JButton("Eliminar Usuario");
-    JButton btnAdminResetCredenciales = new JButton("Resetear Credenciales");
-    JButton btnAdminCrearSucursal = new JButton("Crear Sucursal");
-    JButton btnAdminEliminarSucursal = new JButton("Eliminar Sucursal");
-    JButton btnAdminVerUsuarios = new JButton("Ver Usuarios");
-    JButton btnAdminVerSucursales = new JButton("Ver Sucursales");
+    final JButton btnAdminCrearUsuario = new JButton("Crear Contacto/Empleado");
+    final JButton btnAdminEliminarUsuario = new JButton("Eliminar Usuario");
+    final JButton btnAdminVerCredenciales = new JButton("Listar Credenciales");
+    final JButton btnAdminCrearSucursal = new JButton("Crear Sucursal");
+    final JButton btnAdminEliminarSucursal = new JButton("Eliminar Sucursal");
+    final JButton btnAdminCrearCredenciales = new JButton("Crear Credenciales");
+    final JButton btnAdminEliminarCredenciales = new JButton("Eliminar Credenciales");
+    final JButton btnAdminVerUsuarios = new JButton("Ver Usuarios");
+    final JButton btnAdminVerEmpleados = new JButton("Ver Empleados");
+    final JButton btnAdminVerSucursales = new JButton("Ver Sucursales");
 
-    JFrame frame;
-    JTabbedPane tabs = new JTabbedPane();
-    GridBagConstraints mainConstraints = new GridBagConstraints();
+    final JFrame frame;
+    final JTabbedPane tabs = new JTabbedPane();
+    final GridBagConstraints mainConstraints = new GridBagConstraints();
 
-    PanelSupervisor Supervisor = new PanelSupervisor(this);
-    PanelAdmin Admin = new PanelAdmin(this);
+    final PanelSupervisor supervisor = new PanelSupervisor(this);
+    final PanelAdmin admin = new PanelAdmin(this);
 
     public PanelUsuario(JFrame frame) {
         super();
@@ -113,6 +110,8 @@ public class PanelUsuario extends JPanel implements PanelYara {
         panelBuscarResultados.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         txtResultados.setBounds(30, 40, 150, 75);
         JScrollPane scrollResultados = new JScrollPane(txtResultados);
+        lblResultados.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panelBuscarResultados.add(lblResultados);
         panelBuscarResultados.add(scrollResultados);
 
         panelBuscar.add(panelBuscarControles);
@@ -279,7 +278,7 @@ public class PanelUsuario extends JPanel implements PanelYara {
         constraints.gridwidth = 1;
         panelSupervisor.add(btnSuperVerProveedores, constraints);
         tabs.addTab("Supervisión", panelSupervisor);
-        Supervisor.crearEventos();
+        supervisor.crearEventos();
     }
 
     private void crearControlesAdmin() {
@@ -290,6 +289,8 @@ public class PanelUsuario extends JPanel implements PanelYara {
         btnAdminEliminarSucursal.setForeground(Color.WHITE);
         btnAdminEliminarUsuario.setBackground(Color.RED);
         btnAdminEliminarUsuario.setForeground(Color.WHITE);
+        btnAdminEliminarCredenciales.setBackground(Color.RED);
+        btnAdminEliminarCredenciales.setForeground(Color.WHITE);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(10, 10, 5, 10);
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -320,12 +321,20 @@ public class PanelUsuario extends JPanel implements PanelYara {
         panelAdmin.add(btnAdminEliminarSucursal, constraints);
 
         constraints.gridx = 2;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        panelAdmin.add(btnAdminVerCredenciales, constraints);
+        constraints.gridx = 2;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminResetCredenciales, constraints);
+        panelAdmin.add(btnAdminCrearCredenciales, constraints);
+        constraints.gridx = 2;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        panelAdmin.add(btnAdminEliminarCredenciales, constraints);
         tabs.addTab("Administración", panelAdmin);
         this.frame.pack();
-        Admin.crearEventos();
+        admin.crearEventos();
     }
 
     @Override
@@ -351,109 +360,45 @@ public class PanelUsuario extends JPanel implements PanelYara {
     }
 
     private void listarProductosMalEstado() {
-        ProductoDaoImpl productoDao = new ProductoDaoImpl();
-
-        List<Producto> productosMalEstado = productoDao.listarProductosMalEstado();
-        if (productosMalEstado.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No hay productos mal estado");
-        } else {
-            String[] columnas = {"Producto", "Estado"};
-            String[][] datos = new String[productosMalEstado.size()][2];
-            for (Producto producto : productosMalEstado) {
-                datos[productosMalEstado.indexOf(producto)][0] = producto.getNombre();
-                String estado = producto.getEstado();
-                if (estado == null) {
-                    estado = "N/A";
-                }
-                datos[productosMalEstado.indexOf(producto)][1] = estado;
-            }
-            txtResultados.setModel(new DefaultTableModel(datos, columnas));
-        }
+        UsuarioBasicoController controller = new UsuarioBasicoController();
+        String[][] datos = controller.listarProductosMalEstado();
+        String[] columnas = {"Producto", "Estado"};
+        lblResultados.setText("Lista de productos en mal estado");
+        txtResultados.setModel(new DefaultTableModel(datos, columnas));
     }
+
 
     private void buscarStockDeCategoriaPorNombre() {
         String nombre = txtProductoCategoria.getText();
         if (!nombre.isEmpty()) {
-            CategoriaDaoImpl categoriaDao = new CategoriaDaoImpl();
-            List<Categoria> resultadosDeBusqueda = categoriaDao.findByName(txtProductoCategoria.getText());
-            System.out.println("buscando categorías con nombre '" + nombre + "' en la base de datos");
             String[] columnas = {"Nombre", "Stock"};
-            String[][] datos = new String[resultadosDeBusqueda.size()][2];
-            for (Categoria categoria : resultadosDeBusqueda) {
-                datos[resultadosDeBusqueda.indexOf(categoria)][0] = categoria.getNombre();
-                String stock = categoriaDao.getStock(categoria.getId());
-                if (stock == null) {
-                    stock = "N/A";
-                }
-                datos[resultadosDeBusqueda.indexOf(categoria)][1] = stock;
-            }
-            txtResultados.setModel(new DefaultTableModel(datos, columnas));
+            UsuarioBasicoController controller = new UsuarioBasicoController();
+            lblResultados.setText("Stock de la categoría " + nombre);
+            txtResultados.setModel(new DefaultTableModel(controller.buscarStockDeCategoriaPorNombre(nombre), columnas));
         }
     }
 
     private void buscarStockDeProductoPorNombre() {
         String nombre = txtProductoNombre.getText();
         if (!nombre.isEmpty()) {
-            ProductoDaoImpl productoDao = new ProductoDaoImpl();
-            List<Producto> resultadosDeBusqueda = productoDao.findByName(txtProductoNombre.getText());
-            System.out.println("buscando productos con nombre '" + nombre + "' en la base de datos");
+            UsuarioBasicoController controller = new UsuarioBasicoController();
+            String[][] datos = controller.buscarStockDeProductoPorNombre(nombre);
             String[] columnas = {"Producto", "Proveedor", "Stock"};
-            String[][] datos = new String[resultadosDeBusqueda.size()][3];
-            for (Producto producto : resultadosDeBusqueda) {
-                datos[resultadosDeBusqueda.indexOf(producto)][0] = producto.getNombre();
-                if (producto.getProveedor() != null) {
-                    datos[resultadosDeBusqueda.indexOf(producto)][1] = producto.getProveedor().getRazonSocial();
-                } else {
-                    datos[resultadosDeBusqueda.indexOf(producto)][1] = "N/A";
-                }
-                String stock = productoDao.getStock(producto.getId());
-                if (stock == null) {
-                    stock = "N/A";
-                }
-                datos[resultadosDeBusqueda.indexOf(producto)][2] = stock;
-            }
+            lblResultados.setText("Stock de producto " + nombre);
             txtResultados.setModel(new DefaultTableModel(datos, columnas));
         }
     }
 
     private void buscarProductoPorNombre() {
         String nombre = txtProductoNombre.getText();
-        ProductoDaoImpl productoDao = new ProductoDaoImpl();
-        List<String[]> resultadosDeBusqueda = productoDao.findByNameCategoryStateSupplier(
-                txtProductoNombre.getText(),
-                txtProductoCategoria.getText(),
-                txtProductoEstado.getText(),
-                txtProductoProveedor.getText());
-        System.out.println("buscando productos con nombre '" + nombre + "' en la base de datos");
+        String categoria = txtProductoCategoria.getText();
+        String estado = txtProductoEstado.getText();
+        String proveedor = txtProductoProveedor.getText();
         String[] columnas = {"ID", "Nombre", "Categoría", "Proveedor", "Anaquel", "Estado"};
-        String[][] datos = new String[resultadosDeBusqueda.size()][6];
-        for (String[] producto : resultadosDeBusqueda) {
-            datos[resultadosDeBusqueda.indexOf(producto)][0] = producto[0];
-            datos[resultadosDeBusqueda.indexOf(producto)][1] = producto[1];
-            if (producto[2] != null) {
-                datos[resultadosDeBusqueda.indexOf(producto)][2] = producto[2];
-            } else {
-                datos[resultadosDeBusqueda.indexOf(producto)][2] = "N/A";
-            }
-            if (producto[3] != null) {
-                datos[resultadosDeBusqueda.indexOf(producto)][3] = producto[3];
-            } else {
-                datos[resultadosDeBusqueda.indexOf(producto)][3] = "N/A";
-            }
-            if (producto[4] != null) {
-                datos[resultadosDeBusqueda.indexOf(producto)][4] = producto[4];
-            } else {
-                datos[resultadosDeBusqueda.indexOf(producto)][4] = "N/A";
-            }
-            if (producto[5] != null) {
-                datos[resultadosDeBusqueda.indexOf(producto)][5] = producto[5];
-            } else {
-                datos[resultadosDeBusqueda.indexOf(producto)][5] = "N/A";
-            }
-
-        }
+        UsuarioBasicoController controller = new UsuarioBasicoController();
+        String[][] datos = controller.buscarProductos(nombre, categoria, estado, proveedor);
+        lblResultados.setText("Resultados de la búsqueda de productos");
         txtResultados.setModel(new DefaultTableModel(datos, columnas));
-
     }
 
     protected void activateUserUI() {
@@ -470,13 +415,7 @@ public class PanelUsuario extends JPanel implements PanelYara {
                 if (ventanaLogin.userCorrecto()) {
                     labelUsuarioRol.setText("Rol: USUARIO");
                     crearControlesUsuario();
-                    if (tabs.getTabCount() == 5) {
-                        tabs.remove(4);
-                        tabs.remove(3);
-                    }
-                    if (tabs.getTabCount() == 4) {
-                        tabs.remove(3);
-                    }
+                    borrarTabs(1);
                 }
                 if (ventanaLogin.adminCorrecto()) {
                     labelUsuarioRol.setText("Rol: ADMINISTRADOR");
@@ -488,37 +427,15 @@ public class PanelUsuario extends JPanel implements PanelYara {
                     labelUsuarioRol.setText("Rol: SUPERVISOR");
                     crearControlesUsuario();
                     crearControlesSupervisor();
-                    if (tabs.getTabCount() == 5) {
-                        tabs.remove(4);
-                    }
+                    borrarTabs(2);
                 }
                 labelUsuarioFecha.setText("Login: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             } else {
-                if (tabs.getTabCount() == 5) {
-                    tabs.remove(4);
-                    tabs.remove(3);
-                    tabs.remove(2);
-                }
-                if (tabs.getTabCount() == 4) {
-                    tabs.remove(3);
-                    tabs.remove(2);
-                }
-
+                borrarTabs(1);
                 lockUI(true);
             }
         } else {
-            if (tabs.getTabCount() == 5) {
-                tabs.remove(4);
-                tabs.remove(3);
-                tabs.remove(2);
-            }
-            if (tabs.getTabCount() == 4) {
-                tabs.remove(3);
-                tabs.remove(2);
-            }
-            if (tabs.getTabCount() == 3) {
-                tabs.remove(2);
-            }
+            borrarTabs(0);
             btnLogin.setText("Login");
             btnLogin.setForeground(Color.WHITE);
             btnLogin.setBackground(Color.RED);
@@ -526,10 +443,21 @@ public class PanelUsuario extends JPanel implements PanelYara {
         }
     }
 
+    private void borrarTabs(int tipoUsuario) {
+        //tipoUsuario: 0 = sin sesión, 1 = usuario, 2 = supervisor, 3 = administrador
+        int tabsNumber = tabs.getTabCount();
+        if (tabsNumber > tipoUsuario + 2) {
+            for (int i = tipoUsuario; i < tabsNumber; i++) {
+                if (tabsNumber != 2) {
+                    tabs.remove(tabsNumber - 1);
+                }
+            }
+        }
+    }
 
     @Override
     public void leerConfiguracion() {
-        // TODO document why this method is empty
+        //Para extender la configuración de la aplicación en un futuro
     }
 
     protected void lockUI(boolean lock) {
@@ -588,42 +516,14 @@ class NuevoProductoDialog extends JDialog {
             if (txtNombre.getText().isEmpty() || txtCategoria.getText().isEmpty() || txtProveedor.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios");
             } else {
-                ProductoDaoImpl productoDao = new ProductoDaoImpl();
-                CategoriaDaoImpl categoriaDao = new CategoriaDaoImpl();
-                ProveedorDaoImpl proveedorDao = new ProveedorDaoImpl();
-                Producto producto = new Producto();
-                producto.setNombre(txtNombre.getText());
-                //debería devolver solo uno, en todo caso se usa el primero devuelto
-                List<Categoria> categoriaList = categoriaDao.findByName(txtCategoria.getText());
-                List<Proveedor> proveedorList = proveedorDao.findByName(txtProveedor.getText());
-                Categoria categoria = new Categoria();
-                Proveedor proveedor = new Proveedor();
-                if (categoriaList.isEmpty()) {
-                    categoria.setNombre(txtCategoria.getText());
-                    categoriaDao.save(categoria);
-                } else {
-                    categoria = categoriaList.get(0);
-                }
-                producto.setCategoria(categoria);
-                if (proveedorList.isEmpty()) {
-                    String ruc = JOptionPane.showInputDialog("Ingrese el RUC del nuevo proveedor (11 dígitos):");
-                    if (ruc.length() != 11) {
-                        JOptionPane.showMessageDialog(this, "El RUC debe tener 11 dígitos");
-                        return;
-                    }
-                    proveedor.setRazonSocial(txtProveedor.getText());
-                    proveedor.setRuc(ruc);
-                    proveedorDao.saveBasic(proveedor);
-                } else {
-                    proveedor = proveedorList.get(0);
-                }
-                producto.setProveedor(proveedor);
-                productoDao.saveBasic(producto);
-                dispose();
+                UsuarioBasicoController controller = new UsuarioBasicoController();
+                controller.crearProducto(this, txtNombre.getText(), txtCategoria.getText(), txtProveedor.getText());
             }
         });
         btnCancelar.addActionListener(e -> dispose());
     }
+
+
 }
 
 class EliminarProductoDialog extends JDialog {
@@ -656,17 +556,12 @@ class EliminarProductoDialog extends JDialog {
             if (txtId.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "El campo ID es obligatorio");
             } else {
-                ProductoDaoImpl productoDao = new ProductoDaoImpl();
-                Producto producto = productoDao.get(Integer.parseInt(txtId.getText())).orElse(null);
-                if (producto == null) {
-                    JOptionPane.showMessageDialog(this, "No se encontró el producto con el ID ingresado");
-                } else {
-                    productoDao.delete(producto);
-                    JOptionPane.showMessageDialog(this, "Producto con ID " + txtId.getText() + " eliminado!");
-                    dispose();
-                }
+                UsuarioBasicoController controller = new UsuarioBasicoController();
+                controller.eliminarProducto(this, txtId.getText());
             }
         });
         btnCancelar.addActionListener(e -> dispose());
     }
+
+
 }
