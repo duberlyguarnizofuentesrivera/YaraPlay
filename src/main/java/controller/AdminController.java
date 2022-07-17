@@ -2,8 +2,6 @@ package controller;
 
 import dao.impl.*;
 import model.*;
-import util.Configuracion;
-import util.Utilidades;
 
 import java.util.List;
 import java.util.Map;
@@ -38,12 +36,14 @@ public class AdminController extends AlmaceneroController {
         }
     }
 
-    public boolean crearCredenciales(String userName, String password) {
+    public boolean crearCredenciales(String userName, String password, int empleadoId, int rolId) {
         try {
             Credenciales credenciales = new Credenciales();
             CredencialesDaoImpl credencialesDao = new CredencialesDaoImpl();
             credenciales.setUserName(userName);
             credenciales.setPassword(password);
+            credenciales.setEmpleado(empleadoId);
+            credenciales.setRol(rolId);
             credencialesDao.save(credenciales);
             return true;
         } catch (Exception e) {
@@ -141,5 +141,46 @@ public class AdminController extends AlmaceneroController {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public int[] credentialsExist(String username, String password) {
+        CredencialesDaoImpl credencialesDao = new CredencialesDaoImpl();
+        int userAuthenticated = 0;
+        int userID = 0;
+        int userRole = 0; //1 = admin, 2 = usuario básico, 3 = supervisor
+        Credenciales credenciales = credencialesDao.getByUserName(username).orElse(null);
+        if (credencialesDao != null) {
+            if (credenciales.getPassword().equals(password)) {
+                userAuthenticated = 1;
+            }
+            EmpleadoDaoImpl empleadoDao = new EmpleadoDaoImpl();
+            Empleado empleado = empleadoDao.get(credenciales.getEmpleado()).orElse(null);
+            userRole = (int) (empleado != null ? empleado.getRol().getId() : 0);
+        }
+        System.out.println("userAuthenticated: " + userAuthenticated);
+        System.out.println("userRole: " + userRole);
+        return new int[]{userAuthenticated, userID, userRole};
+    }
+
+    public String getNombresPersonaFromUserName(String username) {
+        CredencialesDaoImpl credencialesDao = new CredencialesDaoImpl();
+        return credencialesDao.getNombresPersona(username).orElse("");
+    }
+
+    public String[][] listarEmpleados() {
+        List<Empleado> empleados;
+        EmpleadoDaoImpl empleadoDao = new EmpleadoDaoImpl();
+        empleados = empleadoDao.getAll();
+        String[][] datos = new String[empleados.size()][4];
+        PersonaDaoImpl personaDao = new PersonaDaoImpl();
+        for (Empleado empleado : empleados) {
+            datos[empleados.indexOf(empleado)][0] = String.valueOf(empleado.getId());
+            String nombre = personaDao.get(empleado.getPersona().getId()).orElse(null).getNombre();
+            String apellido = personaDao.get(empleado.getPersona().getId()).orElse(null).getApellido();
+            datos[empleados.indexOf(empleado)][1] = nombre + " " + apellido;
+            datos[empleados.indexOf(empleado)][2] = String.valueOf(empleado.getRol().getId());
+            datos[empleados.indexOf(empleado)][3] = empleado.getRol().getNombre();
+        }
+        return datos;
     }
 }

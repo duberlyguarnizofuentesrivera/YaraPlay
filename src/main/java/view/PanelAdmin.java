@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -326,6 +325,20 @@ class CrearCredencialesDialog extends JDialog {
         JPasswordField txtPassword = new JPasswordField(36);
         txtPassword.setBorder(BorderFactory.createTitledBorder("Contraseña"));
 
+        JComboBox<String> cmbEmpleado = new JComboBox<>();
+        cmbEmpleado.setBorder(BorderFactory.createTitledBorder("Empleado asociado"));
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        cmbEmpleado.setModel(model);
+        AdminController controller = new AdminController();
+        String[][] empleados = controller.listarEmpleados();
+        List<String> indicesEmpleadoID = new ArrayList<>();
+        List<String> indicesRolID = new ArrayList<>();
+        for (String[] empleado : empleados) {
+            model.addElement(empleado[1] + " - " + empleado[3]);
+            indicesEmpleadoID.add(empleado[0]);
+            indicesRolID.add(empleado[2]);
+        }
+
         JButton btnAceptar = new JButton("Aceptar");
         btnAceptar.setBackground(Color.GREEN);
         btnAceptar.setForeground(Color.BLACK);
@@ -341,6 +354,10 @@ class CrearCredencialesDialog extends JDialog {
         constraints.gridy = 0;
         constraints.gridwidth = 1;
         add(txtPassword, constraints);
+        constraints.gridx = 2;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        add(cmbEmpleado, constraints);
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
@@ -352,9 +369,11 @@ class CrearCredencialesDialog extends JDialog {
         pack();
         btnAceptar.addActionListener(e -> {
             String usuario = txtUserName.getText();
-            String password = Arrays.toString(txtPassword.getPassword());
+            String password = String.copyValueOf(txtPassword.getPassword());
             AdminController adminController = new AdminController();
-            if (adminController.crearCredenciales(usuario, password)) {
+            int empleadoID = Integer.parseInt(indicesEmpleadoID.get(cmbEmpleado.getSelectedIndex()));
+            int rolID = Integer.parseInt(indicesRolID.get(cmbEmpleado.getSelectedIndex()));
+            if (adminController.crearCredenciales(usuario, password, empleadoID, rolID)) {
                 JOptionPane.showMessageDialog(null, "Credenciales creadas");
                 dispose();
             } else {

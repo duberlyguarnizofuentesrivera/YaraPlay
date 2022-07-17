@@ -406,12 +406,14 @@ public class PanelUsuario extends JPanel implements PanelYara {
             PanelLogin ventanaLogin = new PanelLogin(this.frame);
             ventanaLogin.setVisible(true);
             if (ventanaLogin.loginCorrecto()) {
-                btnLogin.setText("Hola " + ventanaLogin.getUsername() + "!");
+                String username = ventanaLogin.getUsername();
+                String nombrePersona = ventanaLogin.getNombrePersona();
+                btnLogin.setText("Hola " + username + "!");
                 lockUI(false);
                 btnLogin.setForeground(Color.BLACK);
                 btnLogin.setBackground(Color.GREEN);
                 btnLogin.setText("Cerrar Sesión");
-                labelUsuarioNombre.setText("Nombre: Juan Luis Guerra");
+                labelUsuarioNombre.setText("Nombre: " + nombrePersona);
                 if (ventanaLogin.userCorrecto()) {
                     labelUsuarioRol.setText("Rol: USUARIO");
                     crearControlesUsuario();
@@ -448,6 +450,7 @@ public class PanelUsuario extends JPanel implements PanelYara {
         int tabsNumber = tabs.getTabCount();
         if (tabsNumber > tipoUsuario + 2) {
             for (int i = tipoUsuario; i < tabsNumber; i++) {
+                tabsNumber = tabs.getTabCount();
                 if (tabsNumber != 2) {
                     tabs.remove(tabsNumber - 1);
                 }

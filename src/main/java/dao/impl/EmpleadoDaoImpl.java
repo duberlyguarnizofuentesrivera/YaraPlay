@@ -18,7 +18,11 @@ public class EmpleadoDaoImpl implements Dao<Empleado> {
         String query = "SELECT * FROM empleado WHERE id = " + id;
         List<String[]> resultados = jdbcConnection.executeQuery(query);
         convertToEmpleado(empleados, resultados);
-        return Optional.ofNullable(empleados.get(0));
+        if (empleados.size() > 0) {
+            return Optional.ofNullable(empleados.get(0));
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -53,7 +57,11 @@ public class EmpleadoDaoImpl implements Dao<Empleado> {
 
     @Override
     public void update(Empleado empleado, String[] params) {
-
+        List<Empleado> empleados = new ArrayList<>();
+        JdbcConnection jdbcConnection = new JdbcConnection();
+        String query = "SELECT persona_id FROM empleado Where id = " + empleado.getId();
+        List<String[]> resultados = jdbcConnection.executeQuery(query);
+        convertToEmpleado(empleados, resultados);
     }
 
     @Override
@@ -73,10 +81,18 @@ public class EmpleadoDaoImpl implements Dao<Empleado> {
             Empleado empleado = new Empleado();
             empleado.setId(Long.parseLong(resultado[0]));
             empleado.setRol(rolDao.get(Long.parseLong(resultado[1])).orElse(null));
-            empleado.setPersona(personaDao.get(Long.parseLong(resultado[2])).orElse(null));
-            empleado.setRegistroAcceso(registroAccesoDao.get(Long.parseLong(resultado[3])).orElse(null));
-            empleado.setRegistroIngresos(registroIngresosDao.get(Long.parseLong(resultado[4])).orElse(null));
-            empleado.setRegistroSalidas(registroSalidasDao.get(Long.parseLong(resultado[5])).orElse(null));
+            if (resultado[2] != null) {
+                empleado.setPersona(personaDao.get(Long.parseLong(resultado[2])).orElse(null));
+            }
+            if (resultado[3] != null) {
+                empleado.setRegistroAcceso(registroAccesoDao.get(Long.parseLong(resultado[3])).orElse(null));
+            }
+            if (resultado[4] != null) {
+                empleado.setRegistroIngresos(registroIngresosDao.get(Long.parseLong(resultado[4])).orElse(null));
+            }
+            if (resultado[5] != null) {
+                empleado.setRegistroSalidas(registroSalidasDao.get(Long.parseLong(resultado[5])).orElse(null));
+            }
             empleados.add(empleado);
         }
     }
