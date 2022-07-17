@@ -2,185 +2,184 @@ package controller;
 
 import dao.impl.*;
 import model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class AdminController extends AlmaceneroController {
+public class AdminController extends SupervisorController {
+    private static final Logger log = LoggerFactory.getLogger(AdminController.class);
+    private final StoreDaoImpl storeDao = new StoreDaoImpl();
+    private final PersonDaoImpl personDao = new PersonDaoImpl();
+    private final EmployeeDaoImpl employeeDao = new EmployeeDaoImpl();
+    private final CredentialsDaoImpl credentialsDao = new CredentialsDaoImpl();
 
-    public boolean eliminarUsuario(long id) {
+    public boolean deleteUser(long id) {
         try {
-            PersonaDaoImpl personaDao = new PersonaDaoImpl();
-            Persona persona = personaDao.get(id).orElse(null);
-            personaDao.delete(Objects.requireNonNull(persona));
+            Person person = personDao.get(id).orElse(null);
+            personDao.delete(Objects.requireNonNull(person));
             return true;
         } catch (Exception e) {
+            log.warn("Error al eliminar el usuario con id: {}", id);
             return false;
         }
     }
 
-    public boolean crearSucursal(String nombre, String direccion, String telefono, Long personaId) {
+    public boolean createStore(String name, String address, String phone, Long personId) {
         try {
-            SucursalDaoImpl sucursalDao = new SucursalDaoImpl();
-            Sucursal sucursal = new Sucursal();
-            PersonaDaoImpl personaDao = new PersonaDaoImpl();
-            sucursal.setNombre(nombre);
-            sucursal.setDireccion(direccion);
-            sucursal.setTelefono(telefono);
-            sucursal.setPersona(personaDao.get(personaId).orElse(null));
-            sucursalDao.save(sucursal);
+            Store store = new Store();
+            store.setName(name);
+            store.setAddress(address);
+            store.setPhone(phone);
+            store.setPersonName(personDao.get(personId).orElse(null));
+            storeDao.save(store);
             return true;
         } catch (Exception e) {
+            log.warn("Error al crear la sucursal: {}", e.getMessage());
             return false;
         }
     }
 
-    public boolean crearCredenciales(String userName, String password, int empleadoId, int rolId) {
+    public boolean createCredentials(String userName, String password, int empleadoId, int rolId) {
         try {
-            Credenciales credenciales = new Credenciales();
-            CredencialesDaoImpl credencialesDao = new CredencialesDaoImpl();
-            credenciales.setUserName(userName);
-            credenciales.setPassword(password);
-            credenciales.setEmpleado(empleadoId);
-            credenciales.setRol(rolId);
-            credencialesDao.save(credenciales);
+            Credentials credentials = new Credentials();
+            credentials.setUserName(userName);
+            credentials.setPassword(password);
+            credentials.setEmployeeID(empleadoId);
+            credentials.setRole(rolId);
+            credentialsDao.save(credentials);
             return true;
         } catch (Exception e) {
+            log.warn("Error al crear credenciales: {}", e.getMessage());
             return false;
         }
     }
 
-    public String[][] listarCredenciales() {
-        CredencialesDaoImpl credencialesDao = new CredencialesDaoImpl();
-        List<Credenciales> credenciales = credencialesDao.getAll();
-        String[][] datos = new String[credenciales.size()][2];
-        for (Credenciales credencial : credenciales) {
-            datos[credenciales.indexOf(credencial)][0] = String.valueOf(credencial.getId());
-            datos[credenciales.indexOf(credencial)][1] = credencial.getUserName();
+    public String[][] listCredentials() {
+        List<Credentials> credentials = credentialsDao.getAll();
+        String[][] data = new String[credentials.size()][2];
+        for (Credentials credencial : credentials) {
+            data[credentials.indexOf(credencial)][0] = String.valueOf(credencial.getId());
+            data[credentials.indexOf(credencial)][1] = credencial.getUserName();
         }
-        return datos;
+        return data;
     }
 
-    public boolean eliminarCredenciales(long id) {
+    public boolean deleteCredentials(long id) {
         try {
-            CredencialesDaoImpl credencialesDao = new CredencialesDaoImpl();
-            credencialesDao.delete(Objects.requireNonNull(credencialesDao.get(id).orElse(null)));
+            credentialsDao.delete(Objects.requireNonNull(credentialsDao.get(id).orElse(null)));
             return true;
         } catch (Exception e) {
+            log.warn("Error al eliminar credenciales con id {}", id);
             return false;
         }
     }
 
-    public boolean eliminarSucursal(Long id) {
+    public boolean deleteStore(Long id) {
         try {
-            SucursalDaoImpl sucursalDao = new SucursalDaoImpl();
-            sucursalDao.delete(Objects.requireNonNull(sucursalDao.get(id).orElse(null)));
+            storeDao.delete(Objects.requireNonNull(storeDao.get(id).orElse(null)));
             return true;
         } catch (Exception e) {
+            log.warn("Error al eliminar sucursal con id: {}", id);
             return false;
         }
     }
 
-    public String[][] listarSucursales() {
-        SucursalDaoImpl sucursalDao = new SucursalDaoImpl();
-        List<Sucursal> sucursales = sucursalDao.getAll();
-        String[][] datos = new String[sucursales.size()][3];
-        for (Sucursal sucursal : sucursales) {
-            datos[sucursales.indexOf(sucursal)][0] = String.valueOf(sucursal.getId());
-            datos[sucursales.indexOf(sucursal)][1] = sucursal.getNombre();
-            datos[sucursales.indexOf(sucursal)][2] = sucursal.getPersona().getNombre() + " " + sucursal.getPersona().getApellido();
+    public String[][] listStores() {
+        List<Store> stores = storeDao.getAll();
+        String[][] data = new String[stores.size()][3];
+        for (Store store : stores) {
+            data[stores.indexOf(store)][0] = String.valueOf(store.getId());
+            data[stores.indexOf(store)][1] = store.getName();
+            data[stores.indexOf(store)][2] = store.getPersonName().getName() + " " + store.getPersonName().getLastName();
         }
-        return datos;
+        return data;
     }
 
-    public String[][] listarUsuarios() {
-        List<Persona> personas;
-        PersonaDaoImpl personaDao = new PersonaDaoImpl();
-        personas = personaDao.getAll();
-        String[][] datos = new String[personas.size()][4];
-        for (Persona persona : personas) {
-            datos[personas.indexOf(persona)][0] = String.valueOf(persona.getId());
-            datos[personas.indexOf(persona)][1] = persona.getNombre() + " " + persona.getApellido();
-            datos[personas.indexOf(persona)][2] = persona.getDni();
-            datos[personas.indexOf(persona)][3] = persona.getTelefono();
+    public String[][] listUsers() {
+        List<Person> people;
+        people = personDao.getAll();
+        String[][] data = new String[people.size()][4];
+        for (Person person : people) {
+            data[people.indexOf(person)][0] = String.valueOf(person.getId());
+            data[people.indexOf(person)][1] = person.getName() + " " + person.getLastName();
+            data[people.indexOf(person)][2] = person.getDni();
+            data[people.indexOf(person)][3] = person.getPhone();
         }
-        return datos;
+        return data;
     }
 
-    public Map<Long, String> listarRoles() {
-        RolDaoImpl rolDao = new RolDaoImpl();
-        List<Rol> roles = rolDao.getAll();
-        Map<Long, String> datos = new java.util.HashMap<>();
-        for (Rol rol : roles) {
-            datos.put(rol.getId(), rol.getNombre());
+    public Map<Long, String> listRoles() {
+        RoleDaoImpl rolDao = new RoleDaoImpl();
+        List<Role> roles = rolDao.getAll();
+        Map<Long, String> data = new java.util.HashMap<>();
+        for (Role role : roles) {
+            data.put(role.getId(), role.getName());
         }
-        return datos;
+        return data;
     }
 
-    public boolean crearUsuario(String[] identidad, String telefono, String email, String direccion, boolean esEmpleado, long idRol) {
+    public boolean crearUsuario(String[] identity, String phone, String email, String address, boolean isEmployee, long idRole) {
         try {
-            PersonaDaoImpl personaDao = new PersonaDaoImpl();
-            RolDaoImpl rolDao = new RolDaoImpl();
-            Persona persona = new Persona();
-            persona.setNombre(identidad[0]); //nombre
-            persona.setApellido(identidad[1]); //apellido
-            persona.setDni(identidad[2]); //dni
-            persona.setTelefono(telefono);
-            persona.setEmail(email);
-            persona.setDireccion(direccion);
-            personaDao.save(persona);
-            if (esEmpleado) {
-                EmpleadoDaoImpl empleadoDao = new EmpleadoDaoImpl();
-                Empleado empleado = new Empleado();
-                empleado.setPersona(personaDao.getByDni(persona.getDni()));
-                empleado.setRol(rolDao.get(idRol).orElse(null));
-                empleadoDao.saveBasics(empleado);
+            RoleDaoImpl rolDao = new RoleDaoImpl();
+            Person person = new Person();
+            person.setName(identity[0]); //nombre
+            person.setLastName(identity[1]); //apellido
+            person.setDni(identity[2]); //dni
+            person.setPhone(phone);
+            person.setEmail(email);
+            person.setAddress(address);
+            personDao.save(person);
+            if (isEmployee) {
+                Employee employee = new Employee();
+                employee.setPerson(personDao.getByDni(person.getDni()));
+                employee.setRole(rolDao.get(idRole).orElse(null));
+                employeeDao.saveBasics(employee);
             }
             return true;
         } catch (Exception e) {
+            log.warn("Error al crear usuario: {}", e.getMessage());
             return false;
         }
     }
 
     public int[] credentialsExist(String username, String password) {
-        CredencialesDaoImpl credencialesDao = new CredencialesDaoImpl();
         int userAuthenticated = 0;
         int userID = 0;
         int userRole = 0; //1 = admin, 2 = usuario básico, 3 = supervisor
-        Credenciales credenciales = credencialesDao.getByUserName(username).orElse(null);
-        if (credencialesDao != null) {
-            if (credenciales.getPassword().equals(password)) {
-                userAuthenticated = 1;
-            }
-            EmpleadoDaoImpl empleadoDao = new EmpleadoDaoImpl();
-            Empleado empleado = empleadoDao.get(credenciales.getEmpleado()).orElse(null);
-            userRole = (int) (empleado != null ? empleado.getRol().getId() : 0);
+        Credentials credentials = credentialsDao.getByUserName(username).orElse(null);
+        String pass = credentials != null ? credentials.getPassword() : "";
+        if (pass != null && pass.equals(password)) {
+            userAuthenticated = 1;
         }
-        System.out.println("userAuthenticated: " + userAuthenticated);
-        System.out.println("userRole: " + userRole);
+        if (credentials != null) {
+            Employee employee = employeeDao.get(credentials.getEmployeeID()).orElse(null);
+            userRole = (int) (employee != null ? employee.getRole().getId() : 0);
+        }
+        log.info("userAuthenticated: {}", userAuthenticated);
         return new int[]{userAuthenticated, userID, userRole};
     }
 
-    public String getNombresPersonaFromUserName(String username) {
-        CredencialesDaoImpl credencialesDao = new CredencialesDaoImpl();
+    public String getCompleteNameFromUsername(String username) {
+        CredentialsDaoImpl credencialesDao = new CredentialsDaoImpl();
         return credencialesDao.getNombresPersona(username).orElse("");
     }
 
-    public String[][] listarEmpleados() {
-        List<Empleado> empleados;
-        EmpleadoDaoImpl empleadoDao = new EmpleadoDaoImpl();
-        empleados = empleadoDao.getAll();
-        String[][] datos = new String[empleados.size()][4];
-        PersonaDaoImpl personaDao = new PersonaDaoImpl();
-        for (Empleado empleado : empleados) {
-            datos[empleados.indexOf(empleado)][0] = String.valueOf(empleado.getId());
-            String nombre = personaDao.get(empleado.getPersona().getId()).orElse(null).getNombre();
-            String apellido = personaDao.get(empleado.getPersona().getId()).orElse(null).getApellido();
-            datos[empleados.indexOf(empleado)][1] = nombre + " " + apellido;
-            datos[empleados.indexOf(empleado)][2] = String.valueOf(empleado.getRol().getId());
-            datos[empleados.indexOf(empleado)][3] = empleado.getRol().getNombre();
+    public String[][] listEmployees() {
+        List<Employee> employees;
+        employees = employeeDao.getAll();
+        String[][] data = new String[employees.size()][4];
+        for (Employee employee : employees) {
+            data[employees.indexOf(employee)][0] = String.valueOf(employee.getId());
+            Person p = personDao.get(employee.getPerson().getId()).orElse(null);
+            String name = p != null ? p.getName() : "";
+            String lastName = p != null ? p.getLastName() : "";
+            data[employees.indexOf(employee)][1] = name + " " + lastName;
+            data[employees.indexOf(employee)][2] = String.valueOf(employee.getRole().getId());
+            data[employees.indexOf(employee)][3] = employee.getRole().getName();
         }
-        return datos;
+        return data;
     }
 }

@@ -59,8 +59,7 @@ public class PanelLogin extends JDialog {
                         "Login",
                         JOptionPane.INFORMATION_MESSAGE);
                 correcto = true;
-                int personaID = resultado[1];
-                AdminController adminController = new AdminController();
+                //resultado[1] = id de persona, no usado aquí
                 if (resultado[2] == 1) {
                     adminCorrecto = true;
                 } else if (resultado[2] == 2) {
@@ -123,6 +122,6 @@ public class PanelLogin extends JDialog {
 
     public String getNombrePersona() {
         AdminController adminController = new AdminController();
-        return adminController.getNombresPersonaFromUserName(getUsername());
+        return adminController.getCompleteNameFromUsername(getUsername());
     }
 }

@@ -34,8 +34,8 @@ public class RegistroSalidasDaoImpl implements Dao<RegistroSalidas> {
     public void save(RegistroSalidas registroSalidas) {
         JdbcConnection jdbcConnection = new JdbcConnection();
         String query = "INSERT INTO registro_salidas (sucursal_id, empleado_id, nombre_transportista, dni_transportista, cantidad, fecha, obs) VALUES ("
-                + registroSalidas.getSucursal().getId() + ", "
-                + registroSalidas.getEmpleado().getId() + ", " + "'"
+                + registroSalidas.getStore().getId() + ", "
+                + registroSalidas.getEmployee().getId() + ", " + "'"
                 + registroSalidas.getNombreTransportista() + "', " + "'"
                 + registroSalidas.getDniTransportista() + "', "
                 + registroSalidas.getCantidad() + ", " + "'"
@@ -46,7 +46,7 @@ public class RegistroSalidasDaoImpl implements Dao<RegistroSalidas> {
 
     @Override
     public void update(RegistroSalidas registroSalidas, String[] params) {
-
+        //para uso futuro
     }
 
     @Override
@@ -58,12 +58,12 @@ public class RegistroSalidasDaoImpl implements Dao<RegistroSalidas> {
 
     private void convertToRegistroSalidas(List<RegistroSalidas> registroSalidas, List<String[]> resultados) {
         for (String[] resultado : resultados) {
-            SucursalDaoImpl sucursalDao = new SucursalDaoImpl();
-            EmpleadoDaoImpl empleadoDao = new EmpleadoDaoImpl();
+            StoreDaoImpl sucursalDao = new StoreDaoImpl();
+            EmployeeDaoImpl empleadoDao = new EmployeeDaoImpl();
             RegistroSalidas registroSalida = new RegistroSalidas();
             registroSalida.setId(Long.parseLong(resultado[0]));
-            registroSalida.setSucursal(sucursalDao.get(Long.parseLong(resultado[1])).orElse(null));
-            registroSalida.setEmpleado(empleadoDao.get(Long.parseLong(resultado[2])).orElse(null));
+            registroSalida.setStore(sucursalDao.get(Long.parseLong(resultado[1])).orElse(null));
+            registroSalida.setEmployee(empleadoDao.get(Long.parseLong(resultado[2])).orElse(null));
             registroSalida.setNombreTransportista(resultado[3]);
             registroSalida.setDniTransportista(resultado[4]);
             registroSalida.setCantidad(Double.parseDouble(resultado[5]));

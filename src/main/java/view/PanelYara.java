@@ -1,13 +1,13 @@
 package view;
 
-import util.Configuracion;
+import util.Config;
 
 public interface PanelYara {
-    Configuracion configuracion = new Configuracion();
+    Config CONFIG = new Config();
 
-    void crearControles();
+    void createControls();
 
-    void crearEventos();
+    void createEvents();
 
-    void leerConfiguracion();
+    void readConfig();
 }

@@ -3,10 +3,10 @@ package model;
 import lombok.Data;
 
 @Data
-public class Empleado {
+public class Employee {
     private long id;
-    private Rol rol;
-    private Persona persona;
+    private Role role;
+    private Person person;
     private RegistroAcceso registroAcceso;
     private RegistroIngresos registroIngresos;
     private RegistroSalidas registroSalidas;

@@ -17,28 +17,14 @@ public class JdbcConnection {
         String url = "jdbc:mysql://localhost/yaraplay";
         String userName = "yaraplay";
         String password = "yara";
-        log.info("conectando a la base de datos");
+        log.info("connect(): conectando a la base de datos");
         try {
             String unicode = "?useSSL=false&autoReconnect=true&useUnicode=yes&characterEncoding=UTF-8";
             return DriverManager.getConnection(url + unicode, userName, password);
         } catch (SQLException e) {
-            log.error("Error al conectar a la base de datos");
+            log.error("connect(): Error al conectar a la base de datos");
             e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    public ResultSet execute(String query) {
-        connection = connect();
-        assert connection != null;
-        try {
-            statement = connection.createStatement();
-            log.info("Query realizado a la DB: {}", query);
-            return statement.executeQuery(query);
-        } catch (SQLException e) {
-            log.error("Error al ejecutar la query: {}", query);
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new YaraPlayException(e);
         }
     }
 
@@ -60,25 +46,26 @@ public class JdbcConnection {
                 result.add(row);
             }
         } catch (SQLException e) {
-            log.error("Error al ejecutar la query: {}", query);
+            log.error("executeQuery(): Error al ejecutar la query: {}", query);
             e.printStackTrace();
             close();
-            throw new RuntimeException(e);
+            throw new YaraPlayException(e);
         }
         close();
         return result;
     }
-    public boolean executeUpdate(String query){
+
+    public boolean executeUpdate(String query) {
         connection = connect();
         assert connection != null;
         try {
             statement = connection.createStatement();
-            log.info("Query realizado a la DB: {}", query);
+            log.info("executeUpdate(): Query realizado a la DB: {}", query);
             return statement.executeUpdate(query) > 0;
         } catch (SQLException e) {
-            log.error("Error al ejecutar la query: {}", query);
+            log.error("executeUpdate(): Error al ejecutar la query: {}", query);
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new YaraPlayException(e);
         }
     }
 
@@ -88,6 +75,13 @@ public class JdbcConnection {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    static class YaraPlayException extends RuntimeException {
+        public YaraPlayException(SQLException e) {
+            super(e.getMessage());
+            log.warn("YaraPlayException(): {}", e.getMessage());
         }
     }
 }

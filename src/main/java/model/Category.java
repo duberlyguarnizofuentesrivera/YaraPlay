@@ -3,7 +3,8 @@ package model;
 import lombok.Data;
 
 @Data
-public class Rol {
+public class Category {
     private long id;
-    private String nombre;
+    private String name;
+
 }

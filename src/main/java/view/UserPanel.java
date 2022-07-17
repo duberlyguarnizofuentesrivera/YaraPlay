@@ -1,6 +1,6 @@
 package view;
 
-import controller.UsuarioBasicoController;
+import controller.UserController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,22 +10,22 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class PanelUsuario extends JPanel implements PanelYara {
-    private final JTextField txtProductoNombre = new JTextField();
-    private final JTextField txtProductoEstado = new JTextField();
-    private final JTextField txtProductoCategoria = new JTextField();
-    private final JTextField txtProductoProveedor = new JTextField();
-    final JTable txtResultados = new JTable();
-    final JLabel lblResultados = new JLabel();
-    private final JButton btnProductoBuscar = new JButton("Buscar");
-    private final JButton btnProductoStock = new JButton("Stock de producto");
-    private final JButton btnCategoriaStock = new JButton("Stock de categoría");
-    private final JButton btnRegistrarEntrada = new JButton("Registrar Entrada");
-    private final JButton btnRegistrarSalida = new JButton("Registrar Salida");
-    private final JButton btnRevisarRegistros = new JButton("Revisar Registros");
-    private final JButton btnAgregarProducto = new JButton("Agregar Producto");
-    private final JButton btnEliminarProducto = new JButton("Eliminar Producto");
-    final JButton btnVerificarProductosMalEstado = new JButton("Ver productos por vencer");
+public class UserPanel extends JPanel implements PanelYara {
+    private final JTextField txtProductName = new JTextField();
+    private final JTextField txtProductState = new JTextField();
+    private final JTextField txtProductCategory = new JTextField();
+    private final JTextField txtProductSupplier = new JTextField();
+    final JTable tblResults = new JTable();
+    final JLabel lblResults = new JLabel();
+    private final JButton btnProductSearch = new JButton("Buscar");
+    private final JButton btnProductStock = new JButton("Stock de producto");
+    private final JButton btnCategoryStock = new JButton("Stock de categoría");
+    private final JButton btnRecordIncomingProduct = new JButton("Registrar Entrada");
+    private final JButton btnRecordOutgoingProduct = new JButton("Registrar Salida");
+    private final JButton btnViewRecords = new JButton("Revisar Registros");
+    private final JButton btnProductAdd = new JButton("Agregar Producto");
+    private final JButton btnProductDelete = new JButton("Eliminar Producto");
+    final JButton btnProductViewBadState = new JButton("Ver productos por vencer");
     final JButton btnLogin = new JButton("Login");
 
     final JLabel labelUsuarioNombre = new JLabel("Nombre: (inicie sesión)");
@@ -33,45 +33,44 @@ public class PanelUsuario extends JPanel implements PanelYara {
     final JLabel labelUsuarioFecha = new JLabel("Login: --/--/--");
 
     //----Controles de panel supervisor---------------
-    final JButton btnSuperCrearAnaquel = new JButton("Crear Anaquel");
-    final JButton btnSuperCrearProveedor = new JButton("Crear Proveedor");
-    final JButton btnSuperCrearCategoria = new JButton("Crear Categoría");
-    final JButton btnSuperEliminarAnaquel = new JButton("Eliminar Anaquel");
-    final JButton btnSuperEliminarProveedor = new JButton("Eliminar Proveedor");
-    final JButton btnSuperEliminarCategoria = new JButton("Eliminar Categoría");
-    final JButton btnSuperVerAnaqueles = new JButton("Ver Anaqueles");
-    final JButton btnSuperVerProveedores = new JButton("Ver Proveedores");
-    final JButton btnSuperVerCategorias = new JButton("Ver Categorías");
+    final JButton btnSuperCreateShelf = new JButton("Crear Anaquel");
+    final JButton btnSuperCreateSupplier = new JButton("Crear Proveedor");
+    final JButton btnSuperCreateCategory = new JButton("Crear Categoría");
+    final JButton btnSuperDeleteShelf = new JButton("Eliminar Anaquel");
+    final JButton btnSuperDeleteSupplier = new JButton("Eliminar Proveedor");
+    final JButton btnSuperDeleteCategory = new JButton("Eliminar Categoría");
+    final JButton btnSuperViewShelves = new JButton("Ver Anaqueles");
+    final JButton btnSuperViewSuppliers = new JButton("Ver Proveedores");
+    final JButton btnSuperViewCategories = new JButton("Ver Categorías");
     //----Controles de panel admin---------------
-    final JButton btnAdminCrearUsuario = new JButton("Crear Contacto/Empleado");
-    final JButton btnAdminEliminarUsuario = new JButton("Eliminar Usuario");
-    final JButton btnAdminVerCredenciales = new JButton("Listar Credenciales");
-    final JButton btnAdminCrearSucursal = new JButton("Crear Sucursal");
-    final JButton btnAdminEliminarSucursal = new JButton("Eliminar Sucursal");
-    final JButton btnAdminCrearCredenciales = new JButton("Crear Credenciales");
-    final JButton btnAdminEliminarCredenciales = new JButton("Eliminar Credenciales");
-    final JButton btnAdminVerUsuarios = new JButton("Ver Usuarios");
-    final JButton btnAdminVerEmpleados = new JButton("Ver Empleados");
-    final JButton btnAdminVerSucursales = new JButton("Ver Sucursales");
+    final JButton btnAdminCreateUser = new JButton("Crear Contacto/Empleado");
+    final JButton btnAdminDeleteUser = new JButton("Eliminar Usuario");
+    final JButton btnAdminViewCredentials = new JButton("Listar Credenciales");
+    final JButton btnAdminCreateStore = new JButton("Crear Sucursal");
+    final JButton btnAdminDeleteStore = new JButton("Eliminar Sucursal");
+    final JButton btnAdminCreateCredentials = new JButton("Crear Credenciales");
+    final JButton btnAdminDeleteCredentials = new JButton("Eliminar Credenciales");
+    final JButton btnAdminViewUsers = new JButton("Ver Usuarios");
+    final JButton btnAdminViewStores = new JButton("Ver Sucursales");
 
     final JFrame frame;
     final JTabbedPane tabs = new JTabbedPane();
     final GridBagConstraints mainConstraints = new GridBagConstraints();
 
-    final PanelSupervisor supervisor = new PanelSupervisor(this);
-    final PanelAdmin admin = new PanelAdmin(this);
+    final SupervisorPanel supervisor = new SupervisorPanel(this);
+    final AdminPanel admin = new AdminPanel(this);
 
-    public PanelUsuario(JFrame frame) {
+    public UserPanel(JFrame frame) {
         super();
-        leerConfiguracion();
-        crearControles();
-        crearEventos();
+        readConfig();
+        createControls();
+        createEvents();
         lockUI(true);
         this.frame = frame;
     }
 
     @Override
-    public void crearControles() {
+    public void createControls() {
 
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // Inicio panel Buscar
@@ -83,35 +82,35 @@ public class PanelUsuario extends JPanel implements PanelYara {
 
         JLabel labelBienvenido = new JLabel("Bienvenido, utilice los campos para buscar una producto:");
         labelBienvenido.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        txtProductoNombre.setBorder(BorderFactory.createTitledBorder("Nombre"));
-        txtProductoCategoria.setBorder(BorderFactory.createTitledBorder("Categoría"));
-        txtProductoEstado.setBorder(BorderFactory.createTitledBorder("Estado"));
-        txtProductoProveedor.setBorder(BorderFactory.createTitledBorder("Proveedor"));
+        txtProductName.setBorder(BorderFactory.createTitledBorder("Nombre"));
+        txtProductCategory.setBorder(BorderFactory.createTitledBorder("Categoría"));
+        txtProductState.setBorder(BorderFactory.createTitledBorder("Estado"));
+        txtProductSupplier.setBorder(BorderFactory.createTitledBorder("Proveedor"));
 
         JPanel panelBuscarControles = new JPanel();
         panelBuscarControles.setLayout(new BoxLayout(panelBuscarControles, BoxLayout.Y_AXIS));
         panelBuscarControles.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panelBuscarControles.add(labelBienvenido);
-        panelBuscarControles.add(txtProductoNombre);
-        panelBuscarControles.add(txtProductoCategoria);
-        panelBuscarControles.add(txtProductoEstado);
-        panelBuscarControles.add(txtProductoProveedor);
+        panelBuscarControles.add(txtProductName);
+        panelBuscarControles.add(txtProductCategory);
+        panelBuscarControles.add(txtProductState);
+        panelBuscarControles.add(txtProductSupplier);
 
         JPanel panelBuscarBotones = new JPanel();
         panelBuscarBotones.setLayout(new BoxLayout(panelBuscarBotones, BoxLayout.X_AXIS));
         panelBuscarBotones.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panelBuscarBotones.add(btnProductoBuscar);
+        panelBuscarBotones.add(btnProductSearch);
         panelBuscarBotones.add(Box.createRigidArea(new Dimension(5, 0)));
-        panelBuscarBotones.add(btnProductoStock);
+        panelBuscarBotones.add(btnProductStock);
         panelBuscarBotones.add(Box.createRigidArea(new Dimension(5, 0)));
-        panelBuscarBotones.add(btnCategoriaStock);
+        panelBuscarBotones.add(btnCategoryStock);
         JPanel panelBuscarResultados = new JPanel();
         panelBuscarResultados.setLayout(new BoxLayout(panelBuscarResultados, BoxLayout.Y_AXIS));
         panelBuscarResultados.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        txtResultados.setBounds(30, 40, 150, 75);
-        JScrollPane scrollResultados = new JScrollPane(txtResultados);
-        lblResultados.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panelBuscarResultados.add(lblResultados);
+        tblResults.setBounds(30, 40, 150, 75);
+        JScrollPane scrollResultados = new JScrollPane(tblResults);
+        lblResults.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panelBuscarResultados.add(lblResults);
         panelBuscarResultados.add(scrollResultados);
 
         panelBuscar.add(panelBuscarControles);
@@ -168,23 +167,23 @@ public class PanelUsuario extends JPanel implements PanelYara {
         panelEntradaSalida.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         panelEntradaSalida.setBorder(BorderFactory.createTitledBorder("Registrar Entrada/Salida De Productos"));
-        btnRegistrarEntrada.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnRegistrarEntrada.setMaximumSize(new Dimension(150, 30));
-        btnRegistrarSalida.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnRecordIncomingProduct.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnRecordIncomingProduct.setMaximumSize(new Dimension(150, 30));
+        btnRecordOutgoingProduct.setAlignmentX(Component.CENTER_ALIGNMENT);
         constraints.insets = new Insets(5, 10, 5, 10);
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panelEntradaSalida.add(btnRegistrarEntrada, constraints);
+        panelEntradaSalida.add(btnRecordIncomingProduct, constraints);
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panelEntradaSalida.add(btnRegistrarSalida, constraints);
-        panelEntradaSalida.add(btnRevisarRegistros);
+        panelEntradaSalida.add(btnRecordOutgoingProduct, constraints);
+        panelEntradaSalida.add(btnViewRecords);
         // Fin panel Registrar Entradas/Salidas
 
         // Inicio panel Agregar/Eliminar Productos
@@ -192,23 +191,22 @@ public class PanelUsuario extends JPanel implements PanelYara {
         panelAgregarEliminarProducto.setLayout(new GridBagLayout());
         panelAgregarEliminarProducto.setBorder(BorderFactory.createTitledBorder("Agregar/Eliminar Productos"));
 
-        btnAgregarProducto.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        btnEliminarProducto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnProductAdd.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnProductDelete.setAlignmentX(Component.CENTER_ALIGNMENT);
         constraints.insets = new Insets(10, 10, 5, 10);
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panelAgregarEliminarProducto.add(btnAgregarProducto, constraints);
+        panelAgregarEliminarProducto.add(btnProductAdd, constraints);
         constraints.insets = new Insets(5, 10, 10, 10);
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panelAgregarEliminarProducto.add(btnEliminarProducto, constraints);
+        panelAgregarEliminarProducto.add(btnProductDelete, constraints);
         // Fin panel Agregar/Eliminar Productos
 
         //Inicio panel Otras opciones
@@ -216,14 +214,14 @@ public class PanelUsuario extends JPanel implements PanelYara {
         panelOtrasOpciones.setLayout(new GridBagLayout());
         GridBagConstraints constraintsOtrasOpciones = new GridBagConstraints();
         panelOtrasOpciones.setBorder(BorderFactory.createTitledBorder("Otras Opciones"));
-        btnVerificarProductosMalEstado.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnProductViewBadState.setAlignmentX(Component.CENTER_ALIGNMENT);
         constraintsOtrasOpciones.insets = new Insets(10, 10, 5, 10);
         constraintsOtrasOpciones.gridx = 0;
         constraintsOtrasOpciones.gridy = 0;
         constraintsOtrasOpciones.gridwidth = 1;
         constraintsOtrasOpciones.gridheight = 1;
         constraintsOtrasOpciones.fill = GridBagConstraints.HORIZONTAL;
-        panelOtrasOpciones.add(btnVerificarProductosMalEstado, constraintsOtrasOpciones);
+        panelOtrasOpciones.add(btnProductViewBadState, constraintsOtrasOpciones);
 
         //Fin panel Otras opciones
 
@@ -244,161 +242,161 @@ public class PanelUsuario extends JPanel implements PanelYara {
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperCrearAnaquel, constraints);
+        panelSupervisor.add(btnSuperCreateShelf, constraints);
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperEliminarAnaquel, constraints);
+        panelSupervisor.add(btnSuperDeleteShelf, constraints);
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperCrearCategoria, constraints);
+        panelSupervisor.add(btnSuperCreateCategory, constraints);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperEliminarCategoria, constraints);
+        panelSupervisor.add(btnSuperDeleteCategory, constraints);
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperCrearProveedor, constraints);
+        panelSupervisor.add(btnSuperCreateSupplier, constraints);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperEliminarProveedor, constraints);
+        panelSupervisor.add(btnSuperDeleteSupplier, constraints);
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperVerAnaqueles, constraints);
+        panelSupervisor.add(btnSuperViewShelves, constraints);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperVerCategorias, constraints);
+        panelSupervisor.add(btnSuperViewCategories, constraints);
         constraints.gridx = 2;
         constraints.gridy = 3;
         constraints.gridwidth = 1;
-        panelSupervisor.add(btnSuperVerProveedores, constraints);
+        panelSupervisor.add(btnSuperViewSuppliers, constraints);
         tabs.addTab("Supervisión", panelSupervisor);
-        supervisor.crearEventos();
+        supervisor.createEvents();
     }
 
     private void crearControlesAdmin() {
         JPanel panelAdmin = new JPanel();
         panelAdmin.setBorder(BorderFactory.createTitledBorder("Opciones De Administrador"));
         panelAdmin.setLayout(new GridBagLayout());
-        btnAdminEliminarSucursal.setBackground(Color.RED);
-        btnAdminEliminarSucursal.setForeground(Color.WHITE);
-        btnAdminEliminarUsuario.setBackground(Color.RED);
-        btnAdminEliminarUsuario.setForeground(Color.WHITE);
-        btnAdminEliminarCredenciales.setBackground(Color.RED);
-        btnAdminEliminarCredenciales.setForeground(Color.WHITE);
+        btnAdminDeleteStore.setBackground(Color.RED);
+        btnAdminDeleteStore.setForeground(Color.WHITE);
+        btnAdminDeleteUser.setBackground(Color.RED);
+        btnAdminDeleteUser.setForeground(Color.WHITE);
+        btnAdminDeleteCredentials.setBackground(Color.RED);
+        btnAdminDeleteCredentials.setForeground(Color.WHITE);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(10, 10, 5, 10);
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminVerUsuarios, constraints);
+        panelAdmin.add(btnAdminViewUsers, constraints);
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminCrearUsuario, constraints);
+        panelAdmin.add(btnAdminCreateUser, constraints);
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminEliminarUsuario, constraints);
+        panelAdmin.add(btnAdminDeleteUser, constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminVerSucursales, constraints);
+        panelAdmin.add(btnAdminViewStores, constraints);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminCrearSucursal, constraints);
+        panelAdmin.add(btnAdminCreateStore, constraints);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminEliminarSucursal, constraints);
+        panelAdmin.add(btnAdminDeleteStore, constraints);
 
         constraints.gridx = 2;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminVerCredenciales, constraints);
+        panelAdmin.add(btnAdminViewCredentials, constraints);
         constraints.gridx = 2;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminCrearCredenciales, constraints);
+        panelAdmin.add(btnAdminCreateCredentials, constraints);
         constraints.gridx = 2;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        panelAdmin.add(btnAdminEliminarCredenciales, constraints);
+        panelAdmin.add(btnAdminDeleteCredentials, constraints);
         tabs.addTab("Administración", panelAdmin);
         this.frame.pack();
-        admin.crearEventos();
+        admin.createEvents();
     }
 
     @Override
-    public void crearEventos() {
+    public void createEvents() {
 
         btnLogin.addActionListener(e -> activateUserUI());
-        btnProductoBuscar.addActionListener(e -> buscarProductoPorNombre());
-        btnCategoriaStock.addActionListener(e -> buscarStockDeCategoriaPorNombre());
-        btnProductoStock.addActionListener(e -> buscarStockDeProductoPorNombre());
-        btnVerificarProductosMalEstado.addActionListener(e -> listarProductosMalEstado());
-        btnAgregarProducto.addActionListener(e -> agregarProducto());
-        btnEliminarProducto.addActionListener(e -> eliminarProducto());
+        btnProductSearch.addActionListener(e -> searchProductByName());
+        btnCategoryStock.addActionListener(e -> searchCategoryStockByName());
+        btnProductStock.addActionListener(e -> searchProductStockByName());
+        btnProductViewBadState.addActionListener(e -> listarProductosMalEstado());
+        btnProductAdd.addActionListener(e -> agregarProducto());
+        btnProductDelete.addActionListener(e -> eliminarProducto());
     }
 
     private void eliminarProducto() {
-        EliminarProductoDialog eliminarProductoDialog = new EliminarProductoDialog(this.frame, true);
-        eliminarProductoDialog.setVisible(true);
+        DeleteProductDialog deleteProductDialog = new DeleteProductDialog(this.frame, true);
+        deleteProductDialog.setVisible(true);
     }
 
     private void agregarProducto() {
-        NuevoProductoDialog nuevoProductoDialog = new NuevoProductoDialog(this.frame, true);
-        nuevoProductoDialog.setVisible(true);
+        NewProductDialog newProductDialog = new NewProductDialog(this.frame, true);
+        newProductDialog.setVisible(true);
     }
 
     private void listarProductosMalEstado() {
-        UsuarioBasicoController controller = new UsuarioBasicoController();
-        String[][] datos = controller.listarProductosMalEstado();
+        UserController controller = new UserController();
+        String[][] datos = controller.listProductInBadCondition();
         String[] columnas = {"Producto", "Estado"};
-        lblResultados.setText("Lista de productos en mal estado");
-        txtResultados.setModel(new DefaultTableModel(datos, columnas));
+        lblResults.setText("Lista de productos en mal estado");
+        tblResults.setModel(new DefaultTableModel(datos, columnas));
     }
 
 
-    private void buscarStockDeCategoriaPorNombre() {
-        String nombre = txtProductoCategoria.getText();
+    private void searchCategoryStockByName() {
+        String nombre = txtProductCategory.getText();
         if (!nombre.isEmpty()) {
             String[] columnas = {"Nombre", "Stock"};
-            UsuarioBasicoController controller = new UsuarioBasicoController();
-            lblResultados.setText("Stock de la categoría " + nombre);
-            txtResultados.setModel(new DefaultTableModel(controller.buscarStockDeCategoriaPorNombre(nombre), columnas));
+            UserController controller = new UserController();
+            lblResults.setText("Stock de la categoría " + nombre);
+            tblResults.setModel(new DefaultTableModel(controller.findStockOfCategoryByName(nombre), columnas));
         }
     }
 
-    private void buscarStockDeProductoPorNombre() {
-        String nombre = txtProductoNombre.getText();
+    private void searchProductStockByName() {
+        String nombre = txtProductName.getText();
         if (!nombre.isEmpty()) {
-            UsuarioBasicoController controller = new UsuarioBasicoController();
-            String[][] datos = controller.buscarStockDeProductoPorNombre(nombre);
+            UserController controller = new UserController();
+            String[][] datos = controller.findStockOfProductsByName(nombre);
             String[] columnas = {"Producto", "Proveedor", "Stock"};
-            lblResultados.setText("Stock de producto " + nombre);
-            txtResultados.setModel(new DefaultTableModel(datos, columnas));
+            lblResults.setText("Stock de producto " + nombre);
+            tblResults.setModel(new DefaultTableModel(datos, columnas));
         }
     }
 
-    private void buscarProductoPorNombre() {
-        String nombre = txtProductoNombre.getText();
-        String categoria = txtProductoCategoria.getText();
-        String estado = txtProductoEstado.getText();
-        String proveedor = txtProductoProveedor.getText();
+    private void searchProductByName() {
+        String productName = txtProductName.getText();
+        String productCategory = txtProductCategory.getText();
+        String productState = txtProductState.getText();
+        String productSupplier = txtProductSupplier.getText();
         String[] columnas = {"ID", "Nombre", "Categoría", "Proveedor", "Anaquel", "Estado"};
-        UsuarioBasicoController controller = new UsuarioBasicoController();
-        String[][] datos = controller.buscarProductos(nombre, categoria, estado, proveedor);
-        lblResultados.setText("Resultados de la búsqueda de productos");
-        txtResultados.setModel(new DefaultTableModel(datos, columnas));
+        UserController controller = new UserController();
+        String[][] datos = controller.findProducts(productName, productCategory, productState, productSupplier);
+        lblResults.setText("Resultados de la búsqueda de productos");
+        tblResults.setModel(new DefaultTableModel(datos, columnas));
     }
 
     protected void activateUserUI() {
@@ -417,7 +415,7 @@ public class PanelUsuario extends JPanel implements PanelYara {
                 if (ventanaLogin.userCorrecto()) {
                     labelUsuarioRol.setText("Rol: USUARIO");
                     crearControlesUsuario();
-                    borrarTabs(1);
+                    deleteTabs(1);
                 }
                 if (ventanaLogin.adminCorrecto()) {
                     labelUsuarioRol.setText("Rol: ADMINISTRADOR");
@@ -429,15 +427,15 @@ public class PanelUsuario extends JPanel implements PanelYara {
                     labelUsuarioRol.setText("Rol: SUPERVISOR");
                     crearControlesUsuario();
                     crearControlesSupervisor();
-                    borrarTabs(2);
+                    deleteTabs(2);
                 }
                 labelUsuarioFecha.setText("Login: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             } else {
-                borrarTabs(1);
+                deleteTabs(1);
                 lockUI(true);
             }
         } else {
-            borrarTabs(0);
+            deleteTabs(0);
             btnLogin.setText("Login");
             btnLogin.setForeground(Color.WHITE);
             btnLogin.setBackground(Color.RED);
@@ -445,11 +443,11 @@ public class PanelUsuario extends JPanel implements PanelYara {
         }
     }
 
-    private void borrarTabs(int tipoUsuario) {
-        //tipoUsuario: 0 = sin sesión, 1 = usuario, 2 = supervisor, 3 = administrador
+    private void deleteTabs(int userType) {
+        //userType: 0 = sin sesión, 1 = usuario, 2 = supervisor, 3 = administrador
         int tabsNumber = tabs.getTabCount();
-        if (tabsNumber > tipoUsuario + 2) {
-            for (int i = tipoUsuario; i < tabsNumber; i++) {
+        if (tabsNumber > userType + 2) {
+            for (int i = userType; i < tabsNumber; i++) {
                 tabsNumber = tabs.getTabCount();
                 if (tabsNumber != 2) {
                     tabs.remove(tabsNumber - 1);
@@ -459,33 +457,33 @@ public class PanelUsuario extends JPanel implements PanelYara {
     }
 
     @Override
-    public void leerConfiguracion() {
+    public void readConfig() {
         //Para extender la configuración de la aplicación en un futuro
     }
 
     protected void lockUI(boolean lock) {
-        btnProductoBuscar.setEnabled(!lock);
-        btnRegistrarEntrada.setEnabled(!lock);
-        btnRegistrarSalida.setEnabled(!lock);
-        btnAgregarProducto.setEnabled(!lock);
-        btnEliminarProducto.setEnabled(!lock);
-        btnProductoStock.setEnabled(!lock);
-        btnCategoriaStock.setEnabled(!lock);
-        btnRevisarRegistros.setEnabled(!lock);
-        btnVerificarProductosMalEstado.setEnabled(!lock);
-        txtProductoCategoria.setEnabled(!lock);
-        txtProductoNombre.setEnabled(!lock);
-        txtProductoEstado.setEnabled(!lock);
-        txtProductoProveedor.setEnabled(!lock);
+        btnProductSearch.setEnabled(!lock);
+        btnRecordIncomingProduct.setEnabled(!lock);
+        btnRecordOutgoingProduct.setEnabled(!lock);
+        btnProductAdd.setEnabled(!lock);
+        btnProductDelete.setEnabled(!lock);
+        btnProductStock.setEnabled(!lock);
+        btnCategoryStock.setEnabled(!lock);
+        btnViewRecords.setEnabled(!lock);
+        btnProductViewBadState.setEnabled(!lock);
+        txtProductCategory.setEnabled(!lock);
+        txtProductName.setEnabled(!lock);
+        txtProductState.setEnabled(!lock);
+        txtProductSupplier.setEnabled(!lock);
     }
 }
 
-class NuevoProductoDialog extends JDialog {
-    private final JTextField txtNombre = new JTextField(24);
-    private final JTextField txtCategoria = new JTextField(24);
-    private final JTextField txtProveedor = new JTextField(36);
+class NewProductDialog extends JDialog {
+    private final JTextField txtProductName = new JTextField(24);
+    private final JTextField txtProductCategory = new JTextField(24);
+    private final JTextField txtProductSupplier = new JTextField(36);
 
-    public NuevoProductoDialog(JFrame parent, boolean modal) {
+    public NewProductDialog(JFrame parent, boolean modal) {
         super(parent, modal);
         setTitle("Nuevo Producto");
         setSize(300, 200);
@@ -493,9 +491,9 @@ class NuevoProductoDialog extends JDialog {
         setResizable(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new GridLayout(0, 1));
-        txtNombre.setBorder(BorderFactory.createTitledBorder("Nombre"));
-        txtCategoria.setBorder(BorderFactory.createTitledBorder("Categoría"));
-        txtProveedor.setBorder(BorderFactory.createTitledBorder("Proveedor"));
+        txtProductName.setBorder(BorderFactory.createTitledBorder("Nombre"));
+        txtProductCategory.setBorder(BorderFactory.createTitledBorder("Categoría"));
+        txtProductSupplier.setBorder(BorderFactory.createTitledBorder("Proveedor"));
 
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(0, 1);
@@ -503,9 +501,9 @@ class NuevoProductoDialog extends JDialog {
         layout.setVgap(10);
         panel.setLayout(layout);
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        panel.add(txtNombre);
-        panel.add(txtCategoria);
-        panel.add(txtProveedor);
+        panel.add(txtProductName);
+        panel.add(txtProductCategory);
+        panel.add(txtProductSupplier);
         JButton btnAgregar = new JButton("Agregar");
         btnAgregar.setBackground(Color.GREEN);
         btnAgregar.setForeground(Color.BLACK);
@@ -516,11 +514,11 @@ class NuevoProductoDialog extends JDialog {
         this.pack();
 
         btnAgregar.addActionListener(e -> {
-            if (txtNombre.getText().isEmpty() || txtCategoria.getText().isEmpty() || txtProveedor.getText().isEmpty()) {
+            if (txtProductName.getText().isEmpty() || txtProductCategory.getText().isEmpty() || txtProductSupplier.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios");
             } else {
-                UsuarioBasicoController controller = new UsuarioBasicoController();
-                controller.crearProducto(this, txtNombre.getText(), txtCategoria.getText(), txtProveedor.getText());
+                UserController controller = new UserController();
+                controller.createProduct(this, txtProductName.getText(), txtProductCategory.getText(), txtProductSupplier.getText());
             }
         });
         btnCancelar.addActionListener(e -> dispose());
@@ -529,16 +527,16 @@ class NuevoProductoDialog extends JDialog {
 
 }
 
-class EliminarProductoDialog extends JDialog {
-    public EliminarProductoDialog(JFrame parent, boolean modal) {
+class DeleteProductDialog extends JDialog {
+    public DeleteProductDialog(JFrame parent, boolean modal) {
         super(parent, modal);
         setTitle("Eliminar Producto");
         JLabel label = new JLabel("<html>Primero busque el ID del producto en la sección  'buscar',<br> luego ingrese el id del producto a eliminar en el cuadro de abajo</html>");
         JTextField txtId = new JTextField(16);
-        JButton btnEliminar = new JButton("Eliminar");
-        btnEliminar.setBackground(Color.RED);
-        btnEliminar.setForeground(Color.WHITE);
-        JButton btnCancelar = new JButton("Cancelar");
+        JButton btnDelete = new JButton("Eliminar");
+        btnDelete.setBackground(Color.RED);
+        btnDelete.setForeground(Color.WHITE);
+        JButton btnCancel = new JButton("Cancelar");
         txtId.setBorder(BorderFactory.createTitledBorder("ID del producto"));
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(0, 1);
@@ -548,22 +546,22 @@ class EliminarProductoDialog extends JDialog {
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         panel.add(label);
         panel.add(txtId);
-        panel.add(btnEliminar);
-        panel.add(btnCancelar);
+        panel.add(btnDelete);
+        panel.add(btnCancel);
         this.add(panel);
         this.pack();
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        btnEliminar.addActionListener(e -> {
+        btnDelete.addActionListener(e -> {
             if (txtId.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "El campo ID es obligatorio");
             } else {
-                UsuarioBasicoController controller = new UsuarioBasicoController();
-                controller.eliminarProducto(this, txtId.getText());
+                UserController controller = new UserController();
+                controller.deleteProduct(this, txtId.getText());
             }
         });
-        btnCancelar.addActionListener(e -> dispose());
+        btnCancel.addActionListener(e -> dispose());
     }
 
 
