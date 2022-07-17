@@ -62,8 +62,8 @@ public class RegistroSalidasDaoImpl implements Dao<RegistroSalidas> {
             EmpleadoDaoImpl empleadoDao = new EmpleadoDaoImpl();
             RegistroSalidas registroSalida = new RegistroSalidas();
             registroSalida.setId(Long.parseLong(resultado[0]));
-            registroSalida.setSucursal(sucursalDao.get(Long.parseLong(resultado[1])).get());
-            registroSalida.setEmpleado(empleadoDao.get(Long.parseLong(resultado[2])).get());
+            registroSalida.setSucursal(sucursalDao.get(Long.parseLong(resultado[1])).orElse(null));
+            registroSalida.setEmpleado(empleadoDao.get(Long.parseLong(resultado[2])).orElse(null));
             registroSalida.setNombreTransportista(resultado[3]);
             registroSalida.setDniTransportista(resultado[4]);
             registroSalida.setCantidad(Double.parseDouble(resultado[5]));

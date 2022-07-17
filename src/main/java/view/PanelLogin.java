@@ -1,18 +1,15 @@
 package view;
 
+import controller.AdminController;
+import util.Login;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-import util.Login;
-
 public class PanelLogin extends JDialog {
     private final JTextField txtLoginUserName;
     private final JPasswordField txtLoginPassword;
-    private final JLabel lblLoginUserName;
-    private final JLabel lblLoginPassword;
-    private final JButton btnLogin;
-    private final JButton btnCancel;
 
     private boolean correcto = false;
     private boolean userCorrecto = false;
@@ -27,7 +24,7 @@ public class PanelLogin extends JDialog {
 
         cs.fill = GridBagConstraints.HORIZONTAL;
 
-        lblLoginUserName = new JLabel("Usuario: ");
+        JLabel lblLoginUserName = new JLabel("Usuario: ");
         cs.gridx = 0;
         cs.gridy = 0;
         cs.gridwidth = 1;
@@ -39,7 +36,7 @@ public class PanelLogin extends JDialog {
         cs.gridwidth = 2;
         panel.add(txtLoginUserName, cs);
 
-        lblLoginPassword = new JLabel("Contraseña: ");
+        JLabel lblLoginPassword = new JLabel("Contraseña: ");
         cs.gridx = 0;
         cs.gridy = 1;
         cs.gridwidth = 1;
@@ -52,7 +49,7 @@ public class PanelLogin extends JDialog {
         panel.add(txtLoginPassword, cs);
         panel.setBorder(new LineBorder(Color.GRAY));
 
-        btnLogin = new JButton("Iniciar Sesión");
+        JButton btnLogin = new JButton("Iniciar Sesión");
 
         btnLogin.addActionListener(e -> {
             int[] resultado = Login.autenticar(getUsername(), getPassword());
@@ -62,12 +59,14 @@ public class PanelLogin extends JDialog {
                         "Login",
                         JOptionPane.INFORMATION_MESSAGE);
                 correcto = true;
-                if (resultado[1] == 1) {
-                    userCorrecto = true;
-                } else if (resultado[1] == 2) {
-                    supervisorCorrecto = true;
-                } else if (resultado[1] == 3) {
+                int personaID = resultado[1];
+                AdminController adminController = new AdminController();
+                if (resultado[2] == 1) {
                     adminCorrecto = true;
+                } else if (resultado[2] == 2) {
+                    userCorrecto = true;
+                } else if (resultado[2] == 3) {
+                    supervisorCorrecto = true;
                 }
                 dispose();
             } else {
@@ -84,7 +83,7 @@ public class PanelLogin extends JDialog {
                 adminCorrecto = false;
             }
         });
-        btnCancel = new JButton("Cancelar");
+        JButton btnCancel = new JButton("Cancelar");
         btnCancel.addActionListener(e -> dispose());
         JPanel bp = new JPanel();
         bp.add(btnLogin);
@@ -120,5 +119,10 @@ public class PanelLogin extends JDialog {
 
     public boolean adminCorrecto() {
         return adminCorrecto;
+    }
+
+    public String getNombrePersona() {
+        AdminController adminController = new AdminController();
+        return adminController.getNombresPersonaFromUserName(getUsername());
     }
 }

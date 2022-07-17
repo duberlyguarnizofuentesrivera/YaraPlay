@@ -59,7 +59,7 @@ public class RegistroIngresosDaoImpl implements Dao<RegistroIngresos> {
             EmpleadoDaoImpl empleadoDao = new EmpleadoDaoImpl();
             RegistroIngresos registroIngreso = new RegistroIngresos();
             registroIngreso.setId(Long.parseLong(resultado[0]));
-            registroIngreso.setEmpleado(empleadoDao.get(Long.parseLong(resultado[1])).get());
+            registroIngreso.setEmpleado(empleadoDao.get(Long.parseLong(resultado[1])).orElse(null));
             registroIngreso.setNombreTransportista(resultado[2]);
             registroIngreso.setDniTransportista(resultado[3]);
             registroIngreso.setCantidad(Double.parseDouble(resultado[4]));

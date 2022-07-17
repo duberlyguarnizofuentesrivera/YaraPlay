@@ -58,7 +58,7 @@ public class SucursalDaoImpl implements Dao<Sucursal> {
             PersonaDaoImpl personaDao = new PersonaDaoImpl();
             Sucursal sucursal = new Sucursal();
             sucursal.setId(Long.parseLong(resultado[0]));
-            sucursal.setPersona(personaDao.get(Long.parseLong(resultado[1])).get());
+            sucursal.setPersona(personaDao.get(Long.parseLong(resultado[1])).orElse(null));
             sucursal.setNombre(resultado[2]);
             sucursal.setDireccion(resultado[3]);
             sucursal.setTelefono(resultado[4]);

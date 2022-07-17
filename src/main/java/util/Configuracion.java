@@ -2,12 +2,12 @@ package util;
 
 public class Configuracion {
     public void leerConfiguracion() {
-        System.out.println("Leer configuracion");
+        System.out.println("Leer configuración");
     }
     public void guardarConfiguracion() {
-        System.out.println("Guardar configuracion");
+        System.out.println("Guardar configuración");
     }
     public void crearArchivoConfiguracion() {
-        System.out.println("Crear archivo configuracion");
+        System.out.println("Crear archivo configuración");
     }
 }

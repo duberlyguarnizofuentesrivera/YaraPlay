@@ -67,7 +67,7 @@ public class ProveedorDaoImpl implements Dao<Proveedor> {
             Proveedor proveedor = new Proveedor();
             proveedor.setId(Long.parseLong(resultado[0]));
             if (resultado[1] != null) {
-                proveedor.setPersona(personaDao.get(Long.parseLong(resultado[1])).get());
+                proveedor.setPersona(personaDao.get(Long.parseLong(resultado[1])).orElse(null));
             }
             proveedor.setRazonSocial(resultado[2]);
             proveedor.setRuc(resultado[3]);

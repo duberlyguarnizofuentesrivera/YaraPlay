@@ -75,13 +75,13 @@ public class ProductoDaoImpl implements Dao<Producto> {
             Producto producto = new Producto();
             producto.setId(Long.parseLong(resultado[0]));
             if (resultado[1] != null) {
-                producto.setAnaquel(anaquelDao.get(Long.parseLong(resultado[1])).get());
+                producto.setAnaquel(anaquelDao.get(Long.parseLong(resultado[1])).orElse(null));
             }
             if (resultado[2] != null) {
-                producto.setCategoria(categoriaDao.get(Long.parseLong(resultado[2])).get());
+                producto.setCategoria(categoriaDao.get(Long.parseLong(resultado[2])).orElse(null));
             }
             if (resultado[3] != null) {
-                producto.setProveedor(proveedorDao.get(Long.parseLong(resultado[3])).get());
+                producto.setProveedor(proveedorDao.get(Long.parseLong(resultado[3])).orElse(null));
             }
             producto.setNombre(resultado[4]);
             producto.setEstado(resultado[5]);
@@ -135,7 +135,6 @@ public class ProductoDaoImpl implements Dao<Producto> {
                 + " INNER JOIN anaquel ON producto.anaquel_id = anaquel.id"
                 + " WHERE " + nombreQuery + " AND " + categoriaQuery + " AND " + estadoQuery + " AND " + proveedorQuery;
 
-        List<String[]> resultados = jdbcConnection.executeQuery(query);
-        return resultados;
+        return jdbcConnection.executeQuery(query);
     }
 }

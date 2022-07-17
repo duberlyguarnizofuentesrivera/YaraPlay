@@ -1,23 +1,17 @@
 package view;
 
-import dao.impl.AnaquelDaoImpl;
-import dao.impl.CategoriaDaoImpl;
-import dao.impl.PersonaDaoImpl;
-import dao.impl.ProveedorDaoImpl;
-import model.Anaquel;
-import model.Categoria;
-import model.Persona;
-import model.Proveedor;
+import controller.AlmaceneroController;
+import controller.UsuarioBasicoController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 public class PanelSupervisor extends JPanel implements PanelYara {
-    PanelUsuario mainPanel;
+    final PanelUsuario mainPanel;
 
 
     public PanelSupervisor(PanelUsuario mainPanel) {
@@ -27,7 +21,7 @@ public class PanelSupervisor extends JPanel implements PanelYara {
 
     @Override
     public void crearControles() {
-
+        // Utilizado para extender controles sobre el panel principal
     }
 
     @Override
@@ -41,71 +35,48 @@ public class PanelSupervisor extends JPanel implements PanelYara {
         mainPanel.btnSuperVerAnaqueles.addActionListener(e -> verAnaqueles());
         mainPanel.btnSuperVerCategorias.addActionListener(e -> verCategorias());
         mainPanel.btnSuperVerProveedores.addActionListener(e -> verProveedores());
+
     }
 
+
+
     private void verProveedores() {
-        List<Proveedor> proveedores;
-        ProveedorDaoImpl proveedorDao = new ProveedorDaoImpl();
-        proveedores = proveedorDao.getAll();
-        String[] columnas = {"ID", "Nombre"};
-        String[][] datos = new String[proveedores.size()][2];
-        for (Proveedor proveedor : proveedores) {
-            datos[proveedores.indexOf(proveedor)][0] = String.valueOf(proveedor.getId());
-            datos[proveedores.indexOf(proveedor)][1] = proveedor.getRazonSocial();
-        }
+        AlmaceneroController controller = new AlmaceneroController();
+        String[][] datos = controller.verProveedores();
+        String[] columnas = {"ID", "Razón Social"};
+        mainPanel.lblResultados.setText("Listado de proveedores");
         mainPanel.txtResultados.setModel(new DefaultTableModel(datos, columnas));
     }
 
 
     private void verCategorias() {
-        List<Categoria> categorias;
-        CategoriaDaoImpl categoriaDao = new CategoriaDaoImpl();
-        categorias = categoriaDao.getAll();
+        AlmaceneroController controller = new AlmaceneroController();
+        String[][] datos = controller.verCategorias();
         String[] columnas = {"ID", "Nombre"};
-        String[][] datos = new String[categorias.size()][2];
-        for (Categoria categoria : categorias) {
-            datos[categorias.indexOf(categoria)][0] = String.valueOf(categoria.getId());
-            datos[categorias.indexOf(categoria)][1] = categoria.getNombre();
-        }
+        mainPanel.lblResultados.setText("Listado de categorías");
         mainPanel.txtResultados.setModel(new DefaultTableModel(datos, columnas));
     }
 
     private void verAnaqueles() {
-        List<Anaquel> anaqueles;
-        AnaquelDaoImpl anaquelDao = new AnaquelDaoImpl();
-        anaqueles = anaquelDao.getAll();
+        AlmaceneroController controller = new AlmaceneroController();
+        String[][] datos = controller.verAnaqueles();
         String[] columnas = {"ID", "Piso", "Pasaje", "Nivel", "Capacidad"};
-        String[][] datos = new String[anaqueles.size()][5];
-        for (Anaquel anaquel : anaqueles) {
-            datos[anaqueles.indexOf(anaquel)][0] = String.valueOf(anaquel.getId());
-            datos[anaqueles.indexOf(anaquel)][1] = String.valueOf(anaquel.getPiso());
-            datos[anaqueles.indexOf(anaquel)][2] = String.valueOf(anaquel.getPasillo());
-            datos[anaqueles.indexOf(anaquel)][3] = String.valueOf(anaquel.getNivel());
-            datos[anaqueles.indexOf(anaquel)][4] = String.valueOf(anaquel.getCapacidad());
-
-        }
+        mainPanel.lblResultados.setText("Listado de anaqueles");
         mainPanel.txtResultados.setModel(new DefaultTableModel(datos, columnas));
     }
 
 
     private void eliminarProveedor() {
-        ProveedorDaoImpl proveedorDao = new ProveedorDaoImpl();
         String id = JOptionPane.showInputDialog(null, "Busque en el listado de proveedores, luego ingrese el id del proveedor a eliminar");
         if (id != null) {
             if ("".equals(id)) {
-                JOptionPane.showMessageDialog(null, "Debe ingresar un id");
+                JOptionPane.showMessageDialog(null, "Debe ingresar un id de proveedor");
             } else {
-                try {
-                    long idLong = Long.parseLong(id);
-                    Proveedor proveedor = proveedorDao.get(idLong).orElse(null);
-                    if (proveedor != null) {
-                        proveedorDao.delete(proveedor);
-                        JOptionPane.showMessageDialog(null, "Proveedor eliminado");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No se encontró el proveedor");
-                    }
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un id valido");
+                AlmaceneroController controller = new AlmaceneroController();
+                if (controller.eliminarProveedor(id)) {
+                    JOptionPane.showMessageDialog(null, "Proveedor eliminado");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo eliminar el proveedor");
                 }
             }
         }
@@ -121,23 +92,16 @@ public class PanelSupervisor extends JPanel implements PanelYara {
     }
 
     private void eliminarCategoria() {
-        CategoriaDaoImpl categoriaDao = new CategoriaDaoImpl();
         String id = JOptionPane.showInputDialog(null, "Busque en el listado de categorías, luego ingrese el id de la categoría a eliminar");
         if (id != null) {
             if ("".equals(id)) {
                 JOptionPane.showMessageDialog(null, "Debe ingresar un id");
             } else {
-                try {
-                    long idLong = Long.parseLong(id);
-                    Categoria categoria = categoriaDao.get(idLong).orElse(null);
-                    if (categoria != null) {
-                        categoriaDao.delete(categoria);
-                        JOptionPane.showMessageDialog(null, "Categoría eliminada");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No se encontró la categoría");
-                    }
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un id valido");
+                AlmaceneroController controller = new AlmaceneroController();
+                if (controller.eliminarCategoria(id)) {
+                    JOptionPane.showMessageDialog(null, "Categoría eliminada");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo eliminar la categoría");
                 }
             }
         }
@@ -149,23 +113,16 @@ public class PanelSupervisor extends JPanel implements PanelYara {
     }
 
     private void eliminarAnaquel() {
-        AnaquelDaoImpl anaquelDao = new AnaquelDaoImpl();
         String id = JOptionPane.showInputDialog(null, "Busque en el listado de anaqueles, luego ingrese el id del anaquel a eliminar");
         if (id != null) {
             if ("".equals(id)) {
                 JOptionPane.showMessageDialog(null, "Debe ingresar un id");
             } else {
-                try {
-                    long idLong = Long.parseLong(id);
-                    Anaquel anaquel = anaquelDao.get(idLong).orElse(null);
-                    if (anaquel != null) {
-                        anaquelDao.delete(anaquel);
-                        JOptionPane.showMessageDialog(null, "Anaquel eliminado");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No se encontró el anaquel");
-                    }
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un id valido");
+                AlmaceneroController controller = new AlmaceneroController();
+                if (controller.eliminarAnaquel(id)) {
+                    JOptionPane.showMessageDialog(null, "Anaquel eliminado");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo eliminar el anaquel");
                 }
             }
         }
@@ -174,7 +131,7 @@ public class PanelSupervisor extends JPanel implements PanelYara {
 
     @Override
     public void leerConfiguracion() {
-
+        // Utilizado para extender configuraciones sobre el panel principal
     }
 
 
@@ -230,18 +187,20 @@ class NuevoAnaquelDialog extends JDialog {
         add(btnCancelar, constraints);
         pack();
         btnAceptar.addActionListener(e -> {
-            Anaquel anaquel = new Anaquel();
-            if (!Objects.equals(txtPiso.getText(), "") && !Objects.equals(txtPasillo.getText(), "") && !Objects.equals(txtNivel.getText(), "") && !Objects.equals(txtCapacidad.getText(), "")) {
-                anaquel.setPiso(Integer.parseInt(txtPiso.getText()));
-                anaquel.setPasillo(Integer.parseInt(txtPasillo.getText()));
-                anaquel.setNivel(Integer.parseInt(txtNivel.getText()));
-                anaquel.setCapacidad(Integer.parseInt(txtCapacidad.getText()));
-                AnaquelDaoImpl anaquelDao = new AnaquelDaoImpl();
-                anaquelDao.save(anaquel);
-                JOptionPane.showMessageDialog(this, "Anaquel creado correctamente");
-                dispose();
+            String piso = txtPiso.getText();
+            String pasillo = txtPasillo.getText();
+            String nivel = txtNivel.getText();
+            String capacidad = txtCapacidad.getText();
+            if ("".equals(piso) || "".equals(pasillo) || "".equals(nivel) || "".equals(capacidad)) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar todos los datos");
             } else {
-                JOptionPane.showMessageDialog(this, "Debe llenar todos los campos");
+                AlmaceneroController controller = new AlmaceneroController();
+                if (controller.crearAnaquel(piso, pasillo, nivel, capacidad)) {
+                    JOptionPane.showMessageDialog(null, "Anaquel creado");
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo crear el anaquel");
+                }
             }
         });
 
@@ -254,11 +213,12 @@ class NuevaCategoriaDialog {
         String nombre = JOptionPane.showInputDialog("Ingrese el nombre de la nueva categoría: ");
         if (nombre != null) {
             if (nombre.length() > 0) {
-                CategoriaDaoImpl categoriaDao = new CategoriaDaoImpl();
-                Categoria categoria = new Categoria();
-                categoria.setNombre(nombre);
-                categoriaDao.save(categoria);
-                JOptionPane.showMessageDialog(null, "Categoría creada correctamente");
+                AlmaceneroController controller = new AlmaceneroController();
+                if (controller.crearCategoria(nombre)) {
+                    JOptionPane.showMessageDialog(null, "Categoría creada");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo crear la categoría");
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Debe ingresar un nombre");
             }
@@ -286,13 +246,12 @@ class NuevoProveedorDialog extends JDialog {
         cmbPersona.setBorder(BorderFactory.createTitledBorder("Contacto"));
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cmbPersona.setModel(model);
-        PersonaDaoImpl personaDao = new PersonaDaoImpl();
-        List<Persona> personas = personaDao.getAll();
-        List<Long> indices = new ArrayList<>();
-        for (Persona persona : personas) {
-            model.addElement(persona.getNombre() + " " + persona.getApellido());
-            indices.add(persona.getId());
+        UsuarioBasicoController controller = new UsuarioBasicoController();
+        Map<Long, String> listaNombresYApellidos = controller.listarNombresYApellidosYId();
+        for (String nombres : listaNombresYApellidos.values()) {
+            model.addElement(nombres);
         }
+        List<Long> indices = new ArrayList<>(listaNombresYApellidos.keySet());
         JTextField txtDireccion = new JTextField(36);
         txtDireccion.setBorder(BorderFactory.createTitledBorder("Dirección"));
         JTextField txtTelefono = new JTextField(9);
@@ -331,17 +290,16 @@ class NuevoProveedorDialog extends JDialog {
         add(btnCancelar, constraints);
         this.pack();
         btnAceptar.addActionListener(e -> {
-            Proveedor proveedor = new Proveedor();
-            if (!Objects.equals(txtRazonsocial.getText(), "") && !Objects.equals(txtRuc.getText(), "") && !Objects.equals(txtDireccion.getText(), "") && !Objects.equals(txtTelefono.getText(), "")) {
-                proveedor.setRazonSocial(txtRazonsocial.getText());
-                proveedor.setPersona(personaDao.get(indices.get(cmbPersona.getSelectedIndex())).get());
-                proveedor.setRuc(txtRuc.getText());
-                proveedor.setDireccion(txtDireccion.getText());
-                proveedor.setTelefono(txtTelefono.getText());
-                ProveedorDaoImpl proveedorDao = new ProveedorDaoImpl();
-                proveedorDao.save(proveedor);
-                JOptionPane.showMessageDialog(this, "Proveedor creado correctamente");
-                dispose();
+            String razonSocial = txtRazonsocial.getText();
+            String ruc = txtRuc.getText();
+            String direccion = txtDireccion.getText();
+            String telefono = txtTelefono.getText();
+            Long idPersona = indices.get(cmbPersona.getSelectedIndex());
+            if (!"".equals(razonSocial) && !"".equals(ruc) && !"".equals(direccion) && !"".equals(telefono)) {
+                AlmaceneroController almaceneroController = new AlmaceneroController();
+                almaceneroController.crearProveedor(razonSocial, ruc, direccion, telefono, idPersona);
+                JOptionPane.showMessageDialog(null, "Proveedor creado correctamente");
+                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Debe llenar todos los campos");
             }
