@@ -28,9 +28,9 @@ public class UserPanel extends JPanel implements PanelYara {
     final JButton btnProductViewBadState = new JButton("Ver productos por vencer");
     final JButton btnLogin = new JButton("Login");
 
-    final JLabel labelUsuarioNombre = new JLabel("Nombre: (inicie sesión)");
-    final JLabel labelUsuarioRol = new JLabel("Rol: (inicie sesión)");
-    final JLabel labelUsuarioFecha = new JLabel("Login: --/--/--");
+    final JLabel lblUserName = new JLabel("Nombre: (inicie sesión)");
+    final JLabel lblUserRole = new JLabel("Rol: (inicie sesión)");
+    final JLabel lblLoginDate = new JLabel("Login: --/--/--");
 
     //----Controles de panel supervisor---------------
     final JButton btnSuperCreateShelf = new JButton("Crear Anaquel");
@@ -76,34 +76,34 @@ public class UserPanel extends JPanel implements PanelYara {
         // Inicio panel Buscar
         JPanel userContainerPanel = new JPanel();
         userContainerPanel.setLayout(new GridBagLayout());
-        JPanel panelBuscar = new JPanel();
-        panelBuscar.setLayout(new BoxLayout(panelBuscar, BoxLayout.Y_AXIS));
-        panelBuscar.setBorder(BorderFactory.createTitledBorder("Buscar"));
+        JPanel panelSearch = new JPanel();
+        panelSearch.setLayout(new BoxLayout(panelSearch, BoxLayout.Y_AXIS));
+        panelSearch.setBorder(BorderFactory.createTitledBorder("Buscar"));
 
-        JLabel labelBienvenido = new JLabel("Bienvenido, utilice los campos para buscar una producto:");
-        labelBienvenido.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JLabel lblWelcome = new JLabel("Bienvenido, utilice los campos para buscar una producto:");
+        lblWelcome.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         txtProductName.setBorder(BorderFactory.createTitledBorder("Nombre"));
         txtProductCategory.setBorder(BorderFactory.createTitledBorder("Categoría"));
         txtProductState.setBorder(BorderFactory.createTitledBorder("Estado"));
         txtProductSupplier.setBorder(BorderFactory.createTitledBorder("Proveedor"));
 
-        JPanel panelBuscarControles = new JPanel();
-        panelBuscarControles.setLayout(new BoxLayout(panelBuscarControles, BoxLayout.Y_AXIS));
-        panelBuscarControles.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panelBuscarControles.add(labelBienvenido);
-        panelBuscarControles.add(txtProductName);
-        panelBuscarControles.add(txtProductCategory);
-        panelBuscarControles.add(txtProductState);
-        panelBuscarControles.add(txtProductSupplier);
+        JPanel panelSearchControls = new JPanel();
+        panelSearchControls.setLayout(new BoxLayout(panelSearchControls, BoxLayout.Y_AXIS));
+        panelSearchControls.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panelSearchControls.add(lblWelcome);
+        panelSearchControls.add(txtProductName);
+        panelSearchControls.add(txtProductCategory);
+        panelSearchControls.add(txtProductState);
+        panelSearchControls.add(txtProductSupplier);
 
-        JPanel panelBuscarBotones = new JPanel();
-        panelBuscarBotones.setLayout(new BoxLayout(panelBuscarBotones, BoxLayout.X_AXIS));
-        panelBuscarBotones.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panelBuscarBotones.add(btnProductSearch);
-        panelBuscarBotones.add(Box.createRigidArea(new Dimension(5, 0)));
-        panelBuscarBotones.add(btnProductStock);
-        panelBuscarBotones.add(Box.createRigidArea(new Dimension(5, 0)));
-        panelBuscarBotones.add(btnCategoryStock);
+        JPanel panelSearchButtons = new JPanel();
+        panelSearchButtons.setLayout(new BoxLayout(panelSearchButtons, BoxLayout.X_AXIS));
+        panelSearchButtons.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panelSearchButtons.add(btnProductSearch);
+        panelSearchButtons.add(Box.createRigidArea(new Dimension(5, 0)));
+        panelSearchButtons.add(btnProductStock);
+        panelSearchButtons.add(Box.createRigidArea(new Dimension(5, 0)));
+        panelSearchButtons.add(btnCategoryStock);
         JPanel panelBuscarResultados = new JPanel();
         panelBuscarResultados.setLayout(new BoxLayout(panelBuscarResultados, BoxLayout.Y_AXIS));
         panelBuscarResultados.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -113,28 +113,28 @@ public class UserPanel extends JPanel implements PanelYara {
         panelBuscarResultados.add(lblResults);
         panelBuscarResultados.add(scrollResultados);
 
-        panelBuscar.add(panelBuscarControles);
-        panelBuscar.add(panelBuscarBotones);
+        panelSearch.add(panelSearchControls);
+        panelSearch.add(panelSearchButtons);
         // Fin panel Buscar
 
         //Inicio de datos de usuario
-        JPanel panelDatosUsuario = new JPanel();
-        panelDatosUsuario.setLayout(new GridBagLayout());
+        JPanel panelUserInfo = new JPanel();
+        panelUserInfo.setLayout(new GridBagLayout());
         GridBagConstraints currentUserConstraints = new GridBagConstraints();
-        panelDatosUsuario.setBorder(BorderFactory.createTitledBorder("Usuario Actual"));
+        panelUserInfo.setBorder(BorderFactory.createTitledBorder("Usuario Actual"));
         btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnLogin.setBackground(Color.RED);
         btnLogin.setForeground(Color.WHITE);
         currentUserConstraints.fill = GridBagConstraints.VERTICAL;
         currentUserConstraints.gridy = 0;
-        panelDatosUsuario.add(labelUsuarioNombre, currentUserConstraints);
+        panelUserInfo.add(lblUserName, currentUserConstraints);
         currentUserConstraints.gridy = 1;
-        panelDatosUsuario.add(labelUsuarioRol, currentUserConstraints);
+        panelUserInfo.add(lblUserRole, currentUserConstraints);
         currentUserConstraints.gridy = 2;
-        panelDatosUsuario.add(labelUsuarioFecha, currentUserConstraints);
+        panelUserInfo.add(lblLoginDate, currentUserConstraints);
         currentUserConstraints.gridy = 3;
         currentUserConstraints.insets = new Insets(10, 0, 10, 0);
-        panelDatosUsuario.add(btnLogin, currentUserConstraints);
+        panelUserInfo.add(btnLogin, currentUserConstraints);
         //Fin de datos de usuario
 
 
@@ -142,31 +142,31 @@ public class UserPanel extends JPanel implements PanelYara {
         mainConstraints.gridx = 0;
         mainConstraints.gridy = 0;
         mainConstraints.gridwidth = 3;
-        userContainerPanel.add(panelBuscar, mainConstraints);
+        userContainerPanel.add(panelSearch, mainConstraints);
 
         mainConstraints.gridx = 3;
         mainConstraints.gridy = 0;
         mainConstraints.gridwidth = 2;
 
-        tabs.addTab("Login", panelDatosUsuario);
+        tabs.addTab("Login", panelUserInfo);
         tabs.addTab("Buscar", userContainerPanel);
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.add(tabs);
         this.add(panelBuscarResultados);
     }
 
-    private void crearControlesUsuario() {
+    private void createUserControls() {
         GridLayout gridLayout = new GridLayout(4, 1);
         gridLayout.setVgap(15);
         gridLayout.setHgap(20);
-        JPanel panelOperaciones = new JPanel();
-        panelOperaciones.setLayout(gridLayout);
-        panelOperaciones.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel panelOperations = new JPanel();
+        panelOperations.setLayout(gridLayout);
+        panelOperations.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // Inicio panel Registrar Entradas/Salidas
-        JPanel panelEntradaSalida = new JPanel();
-        panelEntradaSalida.setLayout(new GridBagLayout());
+        JPanel panelInboundOutboundProducts = new JPanel();
+        panelInboundOutboundProducts.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
-        panelEntradaSalida.setBorder(BorderFactory.createTitledBorder("Registrar Entrada/Salida De Productos"));
+        panelInboundOutboundProducts.setBorder(BorderFactory.createTitledBorder("Registrar Entrada/Salida De Productos"));
         btnRecordIncomingProduct.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnRecordIncomingProduct.setMaximumSize(new Dimension(150, 30));
         btnRecordOutgoingProduct.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -176,20 +176,20 @@ public class UserPanel extends JPanel implements PanelYara {
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panelEntradaSalida.add(btnRecordIncomingProduct, constraints);
+        panelInboundOutboundProducts.add(btnRecordIncomingProduct, constraints);
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panelEntradaSalida.add(btnRecordOutgoingProduct, constraints);
-        panelEntradaSalida.add(btnViewRecords);
+        panelInboundOutboundProducts.add(btnRecordOutgoingProduct, constraints);
+        panelInboundOutboundProducts.add(btnViewRecords);
         // Fin panel Registrar Entradas/Salidas
 
         // Inicio panel Agregar/Eliminar Productos
-        JPanel panelAgregarEliminarProducto = new JPanel();
-        panelAgregarEliminarProducto.setLayout(new GridBagLayout());
-        panelAgregarEliminarProducto.setBorder(BorderFactory.createTitledBorder("Agregar/Eliminar Productos"));
+        JPanel panelAddDeleteProducts = new JPanel();
+        panelAddDeleteProducts.setLayout(new GridBagLayout());
+        panelAddDeleteProducts.setBorder(BorderFactory.createTitledBorder("Agregar/Eliminar Productos"));
 
         btnProductAdd.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnProductDelete.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -199,21 +199,21 @@ public class UserPanel extends JPanel implements PanelYara {
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panelAgregarEliminarProducto.add(btnProductAdd, constraints);
+        panelAddDeleteProducts.add(btnProductAdd, constraints);
         constraints.insets = new Insets(5, 10, 10, 10);
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panelAgregarEliminarProducto.add(btnProductDelete, constraints);
+        panelAddDeleteProducts.add(btnProductDelete, constraints);
         // Fin panel Agregar/Eliminar Productos
 
         //Inicio panel Otras opciones
-        JPanel panelOtrasOpciones = new JPanel();
-        panelOtrasOpciones.setLayout(new GridBagLayout());
+        JPanel panelOtherOptions = new JPanel();
+        panelOtherOptions.setLayout(new GridBagLayout());
         GridBagConstraints constraintsOtrasOpciones = new GridBagConstraints();
-        panelOtrasOpciones.setBorder(BorderFactory.createTitledBorder("Otras Opciones"));
+        panelOtherOptions.setBorder(BorderFactory.createTitledBorder("Otras Opciones"));
         btnProductViewBadState.setAlignmentX(Component.CENTER_ALIGNMENT);
         constraintsOtrasOpciones.insets = new Insets(10, 10, 5, 10);
         constraintsOtrasOpciones.gridx = 0;
@@ -221,17 +221,17 @@ public class UserPanel extends JPanel implements PanelYara {
         constraintsOtrasOpciones.gridwidth = 1;
         constraintsOtrasOpciones.gridheight = 1;
         constraintsOtrasOpciones.fill = GridBagConstraints.HORIZONTAL;
-        panelOtrasOpciones.add(btnProductViewBadState, constraintsOtrasOpciones);
+        panelOtherOptions.add(btnProductViewBadState, constraintsOtrasOpciones);
 
         //Fin panel Otras opciones
 
-        panelOperaciones.add(panelEntradaSalida);
-        panelOperaciones.add(panelAgregarEliminarProducto);
-        panelOperaciones.add(panelOtrasOpciones);
-        tabs.addTab("Operaciones", panelOperaciones);
+        panelOperations.add(panelInboundOutboundProducts);
+        panelOperations.add(panelAddDeleteProducts);
+        panelOperations.add(panelOtherOptions);
+        tabs.addTab("Operaciones", panelOperations);
     }
 
-    private void crearControlesSupervisor() {
+    private void createSupervisorControls() {
 
         JPanel panelSupervisor = new JPanel();
         panelSupervisor.setBorder(BorderFactory.createTitledBorder("Opciones De Supervisor"));
@@ -279,7 +279,7 @@ public class UserPanel extends JPanel implements PanelYara {
         supervisor.createEvents();
     }
 
-    private void crearControlesAdmin() {
+    private void createAdminControls() {
         JPanel panelAdmin = new JPanel();
         panelAdmin.setBorder(BorderFactory.createTitledBorder("Opciones De Administrador"));
         panelAdmin.setLayout(new GridBagLayout());
@@ -342,22 +342,22 @@ public class UserPanel extends JPanel implements PanelYara {
         btnProductSearch.addActionListener(e -> searchProductByName());
         btnCategoryStock.addActionListener(e -> searchCategoryStockByName());
         btnProductStock.addActionListener(e -> searchProductStockByName());
-        btnProductViewBadState.addActionListener(e -> listarProductosMalEstado());
-        btnProductAdd.addActionListener(e -> agregarProducto());
-        btnProductDelete.addActionListener(e -> eliminarProducto());
+        btnProductViewBadState.addActionListener(e -> listProductsInBadCondition());
+        btnProductAdd.addActionListener(e -> addProduct());
+        btnProductDelete.addActionListener(e -> deleteProducts());
     }
 
-    private void eliminarProducto() {
+    private void deleteProducts() {
         DeleteProductDialog deleteProductDialog = new DeleteProductDialog(this.frame, true);
         deleteProductDialog.setVisible(true);
     }
 
-    private void agregarProducto() {
+    private void addProduct() {
         NewProductDialog newProductDialog = new NewProductDialog(this.frame, true);
         newProductDialog.setVisible(true);
     }
 
-    private void listarProductosMalEstado() {
+    private void listProductsInBadCondition() {
         UserController controller = new UserController();
         String[][] datos = controller.listProductInBadCondition();
         String[] columnas = {"Producto", "Estado"};
@@ -377,13 +377,13 @@ public class UserPanel extends JPanel implements PanelYara {
     }
 
     private void searchProductStockByName() {
-        String nombre = txtProductName.getText();
-        if (!nombre.isEmpty()) {
+        String name = txtProductName.getText();
+        if (!name.isEmpty()) {
             UserController controller = new UserController();
-            String[][] datos = controller.findStockOfProductsByName(nombre);
-            String[] columnas = {"Producto", "Proveedor", "Stock"};
-            lblResults.setText("Stock de producto " + nombre);
-            tblResults.setModel(new DefaultTableModel(datos, columnas));
+            String[][] data = controller.findStockOfProductsByName(name);
+            String[] columns = {"Producto", "Proveedor", "Stock"};
+            lblResults.setText("Stock de producto " + name);
+            tblResults.setModel(new DefaultTableModel(data, columns));
         }
     }
 
@@ -392,44 +392,44 @@ public class UserPanel extends JPanel implements PanelYara {
         String productCategory = txtProductCategory.getText();
         String productState = txtProductState.getText();
         String productSupplier = txtProductSupplier.getText();
-        String[] columnas = {"ID", "Nombre", "Categoría", "Proveedor", "Anaquel", "Estado"};
+        String[] columns = {"ID", "Nombre", "Categoría", "Proveedor", "Anaquel", "Estado"};
         UserController controller = new UserController();
-        String[][] datos = controller.findProducts(productName, productCategory, productState, productSupplier);
+        String[][] data = controller.findProducts(productName, productCategory, productState, productSupplier);
         lblResults.setText("Resultados de la búsqueda de productos");
-        tblResults.setModel(new DefaultTableModel(datos, columnas));
+        tblResults.setModel(new DefaultTableModel(data, columns));
     }
 
     protected void activateUserUI() {
         if (Objects.equals(btnLogin.getText(), "Login")) {
-            PanelLogin ventanaLogin = new PanelLogin(this.frame);
-            ventanaLogin.setVisible(true);
-            if (ventanaLogin.loginCorrecto()) {
-                String username = ventanaLogin.getUsername();
-                String nombrePersona = ventanaLogin.getNombrePersona();
+            PanelLogin loginDialog = new PanelLogin(this.frame);
+            loginDialog.setVisible(true);
+            if (loginDialog.successfulLogin()) {
+                String username = loginDialog.getUsername();
+                String personName = loginDialog.getPersonName();
                 btnLogin.setText("Hola " + username + "!");
                 lockUI(false);
                 btnLogin.setForeground(Color.BLACK);
                 btnLogin.setBackground(Color.GREEN);
                 btnLogin.setText("Cerrar Sesión");
-                labelUsuarioNombre.setText("Nombre: " + nombrePersona);
-                if (ventanaLogin.userCorrecto()) {
-                    labelUsuarioRol.setText("Rol: USUARIO");
-                    crearControlesUsuario();
+                lblUserName.setText("Nombre: " + personName);
+                if (loginDialog.userLoggedIn()) {
+                    lblUserRole.setText("Rol: USUARIO");
+                    createUserControls();
                     deleteTabs(1);
                 }
-                if (ventanaLogin.adminCorrecto()) {
-                    labelUsuarioRol.setText("Rol: ADMINISTRADOR");
-                    crearControlesUsuario();
-                    crearControlesSupervisor();
-                    crearControlesAdmin();
+                if (loginDialog.adminLoggedIn()) {
+                    lblUserRole.setText("Rol: ADMINISTRADOR");
+                    createUserControls();
+                    createSupervisorControls();
+                    createAdminControls();
                 }
-                if (ventanaLogin.supervisorCorrecto()) {
-                    labelUsuarioRol.setText("Rol: SUPERVISOR");
-                    crearControlesUsuario();
-                    crearControlesSupervisor();
+                if (loginDialog.supervisorLoggedIn()) {
+                    lblUserRole.setText("Rol: SUPERVISOR");
+                    createUserControls();
+                    createSupervisorControls();
                     deleteTabs(2);
                 }
-                labelUsuarioFecha.setText("Login: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                lblLoginDate.setText("Login: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             } else {
                 deleteTabs(1);
                 lockUI(true);
@@ -504,16 +504,16 @@ class NewProductDialog extends JDialog {
         panel.add(txtProductName);
         panel.add(txtProductCategory);
         panel.add(txtProductSupplier);
-        JButton btnAgregar = new JButton("Agregar");
-        btnAgregar.setBackground(Color.GREEN);
-        btnAgregar.setForeground(Color.BLACK);
-        panel.add(btnAgregar);
-        JButton btnCancelar = new JButton("Cancelar");
-        panel.add(btnCancelar);
+        JButton btnAddProduct = new JButton("Agregar");
+        btnAddProduct.setBackground(Color.GREEN);
+        btnAddProduct.setForeground(Color.BLACK);
+        panel.add(btnAddProduct);
+        JButton btnCancel = new JButton("Cancelar");
+        panel.add(btnCancel);
         this.add(panel);
         this.pack();
 
-        btnAgregar.addActionListener(e -> {
+        btnAddProduct.addActionListener(e -> {
             if (txtProductName.getText().isEmpty() || txtProductCategory.getText().isEmpty() || txtProductSupplier.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios");
             } else {
@@ -521,7 +521,7 @@ class NewProductDialog extends JDialog {
                 controller.createProduct(this, txtProductName.getText(), txtProductCategory.getText(), txtProductSupplier.getText());
             }
         });
-        btnCancelar.addActionListener(e -> dispose());
+        btnCancel.addActionListener(e -> dispose());
     }
 
 
@@ -563,6 +563,4 @@ class DeleteProductDialog extends JDialog {
         });
         btnCancel.addActionListener(e -> dispose());
     }
-
-
 }

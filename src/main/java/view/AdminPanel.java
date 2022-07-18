@@ -24,19 +24,19 @@ public class AdminPanel extends JPanel implements PanelYara {
 
     @Override
     public void createEvents() {
-        userPanel.btnAdminCreateStore.addActionListener(e -> crearSucursal());
-        userPanel.btnAdminDeleteStore.addActionListener(e -> eliminarSucursal());
-        userPanel.btnAdminViewStores.addActionListener(e -> listarSucursales());
-        userPanel.btnAdminViewUsers.addActionListener(e -> listarUsuarios());
-        userPanel.btnAdminCreateUser.addActionListener(e -> crearUsuario());
-        userPanel.btnAdminDeleteUser.addActionListener(e -> eliminarUsuario());
-        userPanel.btnAdminCreateCredentials.addActionListener(e -> crearCredenciales());
-        userPanel.btnAdminViewCredentials.addActionListener(e -> verCredenciales());
-        userPanel.btnAdminDeleteCredentials.addActionListener(e -> eliminarCredenciales());
+        userPanel.btnAdminCreateStore.addActionListener(e -> createStore());
+        userPanel.btnAdminDeleteStore.addActionListener(e -> deleteStore());
+        userPanel.btnAdminViewStores.addActionListener(e -> listStores());
+        userPanel.btnAdminViewUsers.addActionListener(e -> listUsers());
+        userPanel.btnAdminCreateUser.addActionListener(e -> createUser());
+        userPanel.btnAdminDeleteUser.addActionListener(e -> deleteUser());
+        userPanel.btnAdminCreateCredentials.addActionListener(e -> createCredentials());
+        userPanel.btnAdminViewCredentials.addActionListener(e -> viewCredentials());
+        userPanel.btnAdminDeleteCredentials.addActionListener(e -> deleteCredentials());
 
     }
 
-    private void eliminarCredenciales() {
+    private void deleteCredentials() {
         String result = JOptionPane.showInputDialog("Busque el ID en el listado de credenciales, y luego ingrese el id de la credencial a eliminar");
         if (result != null) {
             try {
@@ -55,55 +55,59 @@ public class AdminPanel extends JPanel implements PanelYara {
 
     }
 
-    private void verCredenciales() {
+    private void viewCredentials() {
         AdminController controller = new AdminController();
-        String[][] datos = controller.listCredentials();
-        String[] columnas = {"ID", "Nombre de usuario"};
+        String[][] data = controller.listCredentials();
+        String[] columns = {"ID", "Nombre de usuario"};
         userPanel.lblResults.setText("Listado de credenciales");
-        userPanel.tblResults.setModel(new DefaultTableModel(datos, columnas));
+        userPanel.tblResults.setModel(new DefaultTableModel(data, columns));
     }
 
-    private void crearCredenciales() {
+    private void createCredentials() {
         NewCredentialsDialog newCredentialsDialog = new NewCredentialsDialog();
         newCredentialsDialog.setVisible(true);
     }
 
-    private void eliminarUsuario() {
+    private void deleteUser() {
         String id = JOptionPane.showInputDialog("Busque y luego ingrese el ID del usuario a eliminar");
         if ("".equals(id)) {
             JOptionPane.showMessageDialog(null, "Debe ingresar un ID");
         } else {
             AdminController controller = new AdminController();
-            if (controller.deleteUser(Integer.parseInt(id))) {
-                JOptionPane.showMessageDialog(null, "Usuario eliminado");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo eliminar el usuario");
+            try {
+                if (controller.deleteUser(Integer.parseInt(id))) {
+                    JOptionPane.showMessageDialog(null, "Usuario eliminado");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo eliminar el usuario");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "El ID ingresado no tiene el formato correcto: ");
             }
         }
     }
 
-    private void crearUsuario() {
+    private void createUser() {
         NewUserDialog newUserDialog = new NewUserDialog();
         newUserDialog.setVisible(true);
     }
 
-    private void listarUsuarios() {
+    private void listUsers() {
         AdminController controller = new AdminController();
-        String[][] datos = controller.listUsers();
-        String[] columnas = {"ID", "Nombres", "DNI", "Teléfono"};
+        String[][] data = controller.listUsers();
+        String[] columns = {"ID", "Nombres", "DNI", "Teléfono"};
         userPanel.lblResults.setText("Listado de usuarios");
-        userPanel.tblResults.setModel(new DefaultTableModel(datos, columnas));
+        userPanel.tblResults.setModel(new DefaultTableModel(data, columns));
     }
 
-    private void listarSucursales() {
+    private void listStores() {
         AdminController controller = new AdminController();
-        String[][] datos = controller.listStores();
-        String[] columnas = {"ID", "Nombre", "Contacto"};
+        String[][] data = controller.listStores();
+        String[] columns = {"ID", "Nombre", "Contacto"};
         userPanel.lblResults.setText("Listado de sucursales");
-        userPanel.tblResults.setModel(new DefaultTableModel(datos, columnas));
+        userPanel.tblResults.setModel(new DefaultTableModel(data, columns));
     }
 
-    private void eliminarSucursal() {
+    private void deleteStore() {
         String result = JOptionPane.showInputDialog("Busque el ID en el listado de sucursales, y luego ingrese el id de la sucursal a eliminar");
         if (result != null) {
             try {
@@ -120,7 +124,7 @@ public class AdminPanel extends JPanel implements PanelYara {
         }
     }
 
-    private void crearSucursal() {
+    private void createStore() {
         NewStoreDialog newStoreDialog = new NewStoreDialog();
         newStoreDialog.setVisible(true);
     }

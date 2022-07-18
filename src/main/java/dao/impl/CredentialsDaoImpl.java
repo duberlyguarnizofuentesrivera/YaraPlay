@@ -12,7 +12,7 @@ public class CredentialsDaoImpl implements Dao<Credentials> {
     @Override
     public void save(Credentials credentials) {
         JdbcConnection jdbcConnection = new JdbcConnection();
-        String query = "INSERT INTO credenciales (usuario, password, rol_id, empleado_id) VALUES ('" + credentials.getUserName() + "', '" + credentials.getPassword() + "','"+ credentials.getRole()+"','"+ credentials.getEmployeeID()+"')";
+        String query = "INSERT INTO credenciales (usuario, password, rol_id, empleado_id) VALUES ('" + credentials.getUserName() + "', '" + credentials.getPassword() + "','" + credentials.getRole() + "','" + credentials.getEmployeeID() + "')";
         jdbcConnection.executeUpdate(query);
     }
 
@@ -69,7 +69,11 @@ public class CredentialsDaoImpl implements Dao<Credentials> {
         String query = "SELECT * FROM credenciales WHERE usuario = '" + username + "'";
         List<String[]> resultados = jdbcConnection.executeQuery(query);
         convertToCredencial(credenciales, resultados);
-        return Optional.ofNullable(credenciales.get(0));
+        if (credenciales.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(credenciales.get(0));
+        }
     }
 
     public Optional<String> getNombresPersona(String username) {

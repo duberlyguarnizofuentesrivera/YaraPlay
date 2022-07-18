@@ -11,10 +11,10 @@ public class PanelLogin extends JDialog {
     private final JTextField txtLoginUserName;
     private final JPasswordField txtLoginPassword;
 
-    private boolean correcto = false;
-    private boolean userCorrecto = false;
-    private boolean supervisorCorrecto = false;
-    private boolean adminCorrecto = false;
+    private boolean success = false;
+    private boolean userLoggedIn = false;
+    private boolean supervisorLoggedIn = false;
+    private boolean adminLoggedIn = false;
 
     public PanelLogin(Frame parent) {
         super(parent, "Login", true);
@@ -58,14 +58,14 @@ public class PanelLogin extends JDialog {
                         "Hola " + getUsername() + "! Has iniciado sesión correctamente.",
                         "Login",
                         JOptionPane.INFORMATION_MESSAGE);
-                correcto = true;
+                success = true;
                 //resultado[1] = id de persona, no usado aquí
                 if (resultado[2] == 1) {
-                    adminCorrecto = true;
+                    adminLoggedIn = true;
                 } else if (resultado[2] == 2) {
-                    userCorrecto = true;
+                    userLoggedIn = true;
                 } else if (resultado[2] == 3) {
-                    supervisorCorrecto = true;
+                    supervisorLoggedIn = true;
                 }
                 dispose();
             } else {
@@ -76,10 +76,10 @@ public class PanelLogin extends JDialog {
                 // reset username and password
                 txtLoginUserName.setText("");
                 txtLoginPassword.setText("");
-                correcto = false;
-                userCorrecto = false;
-                supervisorCorrecto = false;
-                adminCorrecto = false;
+                success = false;
+                userLoggedIn = false;
+                supervisorLoggedIn = false;
+                adminLoggedIn = false;
             }
         });
         JButton btnCancel = new JButton("Cancelar");
@@ -104,23 +104,23 @@ public class PanelLogin extends JDialog {
         return new String(txtLoginPassword.getPassword());
     }
 
-    public boolean loginCorrecto() {
-        return correcto;
+    public boolean successfulLogin() {
+        return success;
     }
 
-    public boolean userCorrecto() {
-        return userCorrecto;
+    public boolean userLoggedIn() {
+        return userLoggedIn;
     }
 
-    public boolean supervisorCorrecto() {
-        return supervisorCorrecto;
+    public boolean supervisorLoggedIn() {
+        return supervisorLoggedIn;
     }
 
-    public boolean adminCorrecto() {
-        return adminCorrecto;
+    public boolean adminLoggedIn() {
+        return adminLoggedIn;
     }
 
-    public String getNombrePersona() {
+    public String getPersonName() {
         AdminController adminController = new AdminController();
         return adminController.getCompleteNameFromUsername(getUsername());
     }
