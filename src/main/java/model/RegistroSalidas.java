@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 @Data
 public class RegistroSalidas {
     private long id;
-    private Sucursal sucursal;
-    private Empleado empleado;
+    private Store store;
+    private Employee employee;
     private String nombreTransportista;
     private String dniTransportista;
     private double cantidad;

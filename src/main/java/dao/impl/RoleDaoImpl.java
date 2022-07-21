@@ -2,17 +2,17 @@ package dao.impl;
 
 import dao.Dao;
 import dao.JdbcConnection;
-import model.Rol;
+import model.Role;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class RolDaoImpl implements Dao<Rol> {
+public class RoleDaoImpl implements Dao<Role> {
 
     @Override
-    public Optional<Rol> get(long id) {
-        List<Rol> roles = new ArrayList<>();
+    public Optional<Role> get(long id) {
+        List<Role> roles = new ArrayList<>();
         JdbcConnection jdbcConnection = new JdbcConnection();
         String query = "SELECT * FROM rol WHERE id = " + id;
         List<String[]> resultados = jdbcConnection.executeQuery(query);
@@ -21,8 +21,8 @@ public class RolDaoImpl implements Dao<Rol> {
     }
 
     @Override
-    public List<Rol> getAll() {
-        List<Rol> roles = new ArrayList<>();
+    public List<Role> getAll() {
+        List<Role> roles = new ArrayList<>();
         JdbcConnection jdbcConnection = new JdbcConnection();
         List<String[]> resultados = jdbcConnection.executeQuery("SELECT * FROM rol");
         convertToRol(roles, resultados);
@@ -30,32 +30,32 @@ public class RolDaoImpl implements Dao<Rol> {
     }
 
     @Override
-    public void save(Rol rol) {
+    public void save(Role role) {
         JdbcConnection jdbcConnection = new JdbcConnection();
-        String query = "INSERT INTO rol (nombre) VALUES ('" + rol.getNombre() + "')";
+        String query = "INSERT INTO rol (nombre) VALUES ('" + role.getName() + "')";
         jdbcConnection.executeUpdate(query);
 
     }
 
     @Override
-    public void update(Rol rol, String[] params) {
-
+    public void update(Role role, String[] params) {
+        //para uso futuro
     }
 
     @Override
-    public void delete(Rol rol) {
+    public void delete(Role role) {
         JdbcConnection jdbcConnection = new JdbcConnection();
-        String query = "DELETE FROM rol WHERE id = " + rol.getId();
+        String query = "DELETE FROM rol WHERE id = " + role.getId();
         jdbcConnection.executeUpdate(query);
 
     }
 
-    private void convertToRol(List<Rol> roles, List<String[]> resultados) {
+    private void convertToRol(List<Role> roles, List<String[]> resultados) {
         for (String[] resultado : resultados) {
-            Rol rol = new Rol();
-            rol.setId(Long.parseLong(resultado[0]));
-            rol.setNombre(resultado[1]);
-            roles.add(rol);
+            Role role = new Role();
+            role.setId(Long.parseLong(resultado[0]));
+            role.setName(resultado[1]);
+            roles.add(role);
         }
     }
 }

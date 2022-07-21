@@ -33,7 +33,7 @@ public class RegistroIngresosDaoImpl implements Dao<RegistroIngresos> {
     public void save(RegistroIngresos registroIngreso) {
         JdbcConnection jdbcConnection = new JdbcConnection();
         String query = "INSERT INTO registro_ingresos (empleado_id, nombre_transportista, dni_transportista, cantidad, fecha, obs) VALUES ("
-                + registroIngreso.getEmpleado().getId() + ", '"
+                + registroIngreso.getEmployee().getId() + ", '"
                 + registroIngreso.getNombreTransportista() + "', '"
                 + registroIngreso.getDniTransportista() + "', "
                 + registroIngreso.getCantidad() + ", '"
@@ -44,7 +44,7 @@ public class RegistroIngresosDaoImpl implements Dao<RegistroIngresos> {
 
     @Override
     public void update(RegistroIngresos registroIngreso, String[] params) {
-
+        //para uso futuro
     }
 
     @Override
@@ -56,10 +56,10 @@ public class RegistroIngresosDaoImpl implements Dao<RegistroIngresos> {
 
     private void convertToRegistroIngresos(List<RegistroIngresos> registroIngresos, List<String[]> resultados) {
         for (String[] resultado : resultados) {
-            EmpleadoDaoImpl empleadoDao = new EmpleadoDaoImpl();
+            EmployeeDaoImpl empleadoDao = new EmployeeDaoImpl();
             RegistroIngresos registroIngreso = new RegistroIngresos();
             registroIngreso.setId(Long.parseLong(resultado[0]));
-            registroIngreso.setEmpleado(empleadoDao.get(Long.parseLong(resultado[1])).orElse(null));
+            registroIngreso.setEmployee(empleadoDao.get(Long.parseLong(resultado[1])).orElse(null));
             registroIngreso.setNombreTransportista(resultado[2]);
             registroIngreso.setDniTransportista(resultado[3]);
             registroIngreso.setCantidad(Double.parseDouble(resultado[4]));

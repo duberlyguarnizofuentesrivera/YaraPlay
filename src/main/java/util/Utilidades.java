@@ -1,16 +1,21 @@
 package util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Utilidades {
-    Configuracion configuracion;
-    public void encriptarData() {
-        System.out.println("Encriptar data");
+    private static final Logger log = LoggerFactory.getLogger(Utilidades.class);
+    Config config;
+
+    public void encryptData() {
+        log.info("Encriptar data");
     }
 
-    public void desencriptarData() {
-        System.out.println("Desencriptar data");
+    public void unEncryptData() {
+        log.info("Desencriptar data");
     }
 
-    public void validarConfiguracion() {
-        System.out.println("Validar configuración");
+    public void validateConfig() {
+        log.info("Validar configuración");
     }
 }

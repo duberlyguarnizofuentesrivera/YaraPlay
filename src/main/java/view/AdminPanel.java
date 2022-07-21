@@ -1,7 +1,7 @@
 package view;
 
 import controller.AdminController;
-import controller.UsuarioBasicoController;
+import controller.UserController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,39 +10,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PanelAdmin extends JPanel implements PanelYara {
-    final PanelUsuario panelUsuario;
+public class AdminPanel extends JPanel implements PanelYara {
+    final UserPanel userPanel;
 
-    public PanelAdmin(PanelUsuario panelUsuario) {
-        this.panelUsuario = panelUsuario;
+    public AdminPanel(UserPanel userPanel) {
+        this.userPanel = userPanel;
     }
 
     @Override
-    public void crearControles() {
+    public void createControls() {
         // disponible para extender la aplicación agregando más controles según se necesite.
     }
 
     @Override
-    public void crearEventos() {
-        panelUsuario.btnAdminCrearSucursal.addActionListener(e -> crearSucursal());
-        panelUsuario.btnAdminEliminarSucursal.addActionListener(e -> eliminarSucursal());
-        panelUsuario.btnAdminVerSucursales.addActionListener(e -> listarSucursales());
-        panelUsuario.btnAdminVerUsuarios.addActionListener(e -> listarUsuarios());
-        panelUsuario.btnAdminCrearUsuario.addActionListener(e -> crearUsuario());
-        panelUsuario.btnAdminEliminarUsuario.addActionListener(e -> eliminarUsuario());
-        panelUsuario.btnAdminCrearCredenciales.addActionListener(e -> crearCredenciales());
-        panelUsuario.btnAdminVerCredenciales.addActionListener(e -> verCredenciales());
-        panelUsuario.btnAdminEliminarCredenciales.addActionListener(e -> eliminarCredenciales());
+    public void createEvents() {
+        userPanel.btnAdminCreateStore.addActionListener(e -> createStore());
+        userPanel.btnAdminDeleteStore.addActionListener(e -> deleteStore());
+        userPanel.btnAdminViewStores.addActionListener(e -> listStores());
+        userPanel.btnAdminViewUsers.addActionListener(e -> listUsers());
+        userPanel.btnAdminCreateUser.addActionListener(e -> createUser());
+        userPanel.btnAdminDeleteUser.addActionListener(e -> deleteUser());
+        userPanel.btnAdminCreateCredentials.addActionListener(e -> createCredentials());
+        userPanel.btnAdminViewCredentials.addActionListener(e -> viewCredentials());
+        userPanel.btnAdminDeleteCredentials.addActionListener(e -> deleteCredentials());
 
     }
 
-    private void eliminarCredenciales() {
+    private void deleteCredentials() {
         String result = JOptionPane.showInputDialog("Busque el ID en el listado de credenciales, y luego ingrese el id de la credencial a eliminar");
         if (result != null) {
             try {
                 long id = Long.parseLong(result);
                 AdminController controller = new AdminController();
-                if (controller.eliminarCredenciales(id)) {
+                if (controller.deleteCredentials(id)) {
                     JOptionPane.showMessageDialog(null, "Credencial eliminada");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar la credencial");
@@ -55,61 +55,65 @@ public class PanelAdmin extends JPanel implements PanelYara {
 
     }
 
-    private void verCredenciales() {
+    private void viewCredentials() {
         AdminController controller = new AdminController();
-        String[][] datos = controller.listarCredenciales();
-        String[] columnas = {"ID", "Nombre de usuario"};
-        panelUsuario.lblResultados.setText("Listado de credenciales");
-        panelUsuario.txtResultados.setModel(new DefaultTableModel(datos, columnas));
+        String[][] data = controller.listCredentials();
+        String[] columns = {"ID", "Nombre de usuario"};
+        userPanel.lblResults.setText("Listado de credenciales");
+        userPanel.tblResults.setModel(new DefaultTableModel(data, columns));
     }
 
-    private void crearCredenciales() {
-        CrearCredencialesDialog crearCredencialesDialog = new CrearCredencialesDialog();
-        crearCredencialesDialog.setVisible(true);
+    private void createCredentials() {
+        NewCredentialsDialog newCredentialsDialog = new NewCredentialsDialog();
+        newCredentialsDialog.setVisible(true);
     }
 
-    private void eliminarUsuario() {
+    private void deleteUser() {
         String id = JOptionPane.showInputDialog("Busque y luego ingrese el ID del usuario a eliminar");
         if ("".equals(id)) {
             JOptionPane.showMessageDialog(null, "Debe ingresar un ID");
         } else {
             AdminController controller = new AdminController();
-            if (controller.eliminarUsuario(Integer.parseInt(id))) {
-                JOptionPane.showMessageDialog(null, "Usuario eliminado");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo eliminar el usuario");
+            try {
+                if (controller.deleteUser(Integer.parseInt(id))) {
+                    JOptionPane.showMessageDialog(null, "Usuario eliminado");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo eliminar el usuario");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "El ID ingresado no tiene el formato correcto: ");
             }
         }
     }
 
-    private void crearUsuario() {
-        CrearUsuarioDialog crearUsuarioDialog = new CrearUsuarioDialog();
-        crearUsuarioDialog.setVisible(true);
+    private void createUser() {
+        NewUserDialog newUserDialog = new NewUserDialog();
+        newUserDialog.setVisible(true);
     }
 
-    private void listarUsuarios() {
+    private void listUsers() {
         AdminController controller = new AdminController();
-        String[][] datos = controller.listarUsuarios();
-        String[] columnas = {"ID", "Nombres", "DNI", "Teléfono"};
-        panelUsuario.lblResultados.setText("Listado de usuarios");
-        panelUsuario.txtResultados.setModel(new DefaultTableModel(datos, columnas));
+        String[][] data = controller.listUsers();
+        String[] columns = {"ID", "Nombres", "DNI", "Teléfono"};
+        userPanel.lblResults.setText("Listado de usuarios");
+        userPanel.tblResults.setModel(new DefaultTableModel(data, columns));
     }
 
-    private void listarSucursales() {
+    private void listStores() {
         AdminController controller = new AdminController();
-        String[][] datos = controller.listarSucursales();
-        String[] columnas = {"ID", "Nombre", "Contacto"};
-        panelUsuario.lblResultados.setText("Listado de sucursales");
-        panelUsuario.txtResultados.setModel(new DefaultTableModel(datos, columnas));
+        String[][] data = controller.listStores();
+        String[] columns = {"ID", "Nombre", "Contacto"};
+        userPanel.lblResults.setText("Listado de sucursales");
+        userPanel.tblResults.setModel(new DefaultTableModel(data, columns));
     }
 
-    private void eliminarSucursal() {
+    private void deleteStore() {
         String result = JOptionPane.showInputDialog("Busque el ID en el listado de sucursales, y luego ingrese el id de la sucursal a eliminar");
         if (result != null) {
             try {
                 Long id = Long.parseLong(result);
                 AdminController controller = new AdminController();
-                if (controller.eliminarSucursal(id)) {
+                if (controller.deleteStore(id)) {
                     JOptionPane.showMessageDialog(null, "Sucursal eliminada");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar la sucursal");
@@ -120,20 +124,20 @@ public class PanelAdmin extends JPanel implements PanelYara {
         }
     }
 
-    private void crearSucursal() {
-        NuevaSucursalDialog nuevaSucursalDialog = new NuevaSucursalDialog();
-        nuevaSucursalDialog.setVisible(true);
+    private void createStore() {
+        NewStoreDialog newStoreDialog = new NewStoreDialog();
+        newStoreDialog.setVisible(true);
     }
 
 
     @Override
-    public void leerConfiguracion() {
-
+    public void readConfig() {
+        //para uso futuro
     }
 }
 
-class NuevaSucursalDialog extends JDialog {
-    public NuevaSucursalDialog() {
+class NewStoreDialog extends JDialog {
+    public NewStoreDialog() {
         super();
         setTitle("Nueva Sucursal");
         setLocationRelativeTo(null);
@@ -142,16 +146,16 @@ class NuevaSucursalDialog extends JDialog {
         setLayout(new GridBagLayout());
         JTextField txtNombre = new JTextField(36);
         txtNombre.setBorder(BorderFactory.createTitledBorder("Nombre"));
-        JTextField txtDireccion = new JTextField(36);
-        txtDireccion.setBorder(BorderFactory.createTitledBorder("Dirección"));
-        JTextField txtTelefono = new JTextField(9);
-        txtTelefono.setBorder(BorderFactory.createTitledBorder("Teléfono"));
+        JTextField txtStoreAddress = new JTextField(36);
+        txtStoreAddress.setBorder(BorderFactory.createTitledBorder("Dirección"));
+        JTextField txtStorePhone = new JTextField(9);
+        txtStorePhone.setBorder(BorderFactory.createTitledBorder("Teléfono"));
         JComboBox<String> cmbPersona = new JComboBox<>();
         cmbPersona.setBorder(BorderFactory.createTitledBorder("Contacto"));
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cmbPersona.setModel(model);
-        UsuarioBasicoController controller = new UsuarioBasicoController();
-        Map<Long, String> personasApellidosYId = controller.listarNombresYApellidosYId();
+        UserController controller = new UserController();
+        Map<Long, String> personasApellidosYId = controller.listNamesAndID();
         for (String nombres : personasApellidosYId.values()) {
             model.addElement(nombres);
         }
@@ -174,11 +178,11 @@ class NuevaSucursalDialog extends JDialog {
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
-        add(txtDireccion, constraints);
+        add(txtStoreAddress, constraints);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        add(txtTelefono, constraints);
+        add(txtStorePhone, constraints);
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
@@ -189,12 +193,12 @@ class NuevaSucursalDialog extends JDialog {
         add(btnCancelar, constraints);
         pack();
         btnAceptar.addActionListener(e -> {
-            String nombre = txtNombre.getText();
-            String direccion = txtDireccion.getText();
-            String telefono = txtTelefono.getText();
+            String name = txtNombre.getText();
+            String address = txtStoreAddress.getText();
+            String phone = txtStorePhone.getText();
             long idPersona = indices.get(cmbPersona.getSelectedIndex());
             AdminController adminController = new AdminController();
-            if (adminController.crearSucursal(nombre, direccion, telefono, idPersona)) {
+            if (adminController.createStore(name, address, phone, idPersona)) {
                 JOptionPane.showMessageDialog(null, "Sucursal creada");
                 dispose();
             } else {
@@ -205,39 +209,39 @@ class NuevaSucursalDialog extends JDialog {
     }
 }
 
-class CrearUsuarioDialog extends JDialog {
-    public CrearUsuarioDialog() {
+class NewUserDialog extends JDialog {
+    public NewUserDialog() {
         super();
         setTitle("Nueva Persona");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new GridBagLayout());
-        JTextField txtNombre = new JTextField(36);
-        txtNombre.setBorder(BorderFactory.createTitledBorder("Nombre"));
-        JTextField txtApellido = new JTextField(36);
-        txtApellido.setBorder(BorderFactory.createTitledBorder("Apellido"));
-        JTextField txtDni = new JTextField(8);
-        txtDni.setBorder(BorderFactory.createTitledBorder("DNI"));
-        JTextField txtTelefono = new JTextField(9);
-        txtTelefono.setBorder(BorderFactory.createTitledBorder("Teléfono"));
-        JTextField txtEmail = new JTextField(36);
-        txtEmail.setBorder(BorderFactory.createTitledBorder("Email"));
-        JTextField txtDireccion = new JTextField(36);
-        txtDireccion.setBorder(BorderFactory.createTitledBorder("Dirección"));
+        JTextField txtPersonName = new JTextField(36);
+        txtPersonName.setBorder(BorderFactory.createTitledBorder("Nombre"));
+        JTextField txtPersonLastName = new JTextField(36);
+        txtPersonLastName.setBorder(BorderFactory.createTitledBorder("Apellido"));
+        JTextField txtPersonDNI = new JTextField(8);
+        txtPersonDNI.setBorder(BorderFactory.createTitledBorder("DNI"));
+        JTextField txtPersonPhone = new JTextField(9);
+        txtPersonPhone.setBorder(BorderFactory.createTitledBorder("Teléfono"));
+        JTextField txtPersonEmail = new JTextField(36);
+        txtPersonEmail.setBorder(BorderFactory.createTitledBorder("Email"));
+        JTextField txtPersonAddress = new JTextField(36);
+        txtPersonAddress.setBorder(BorderFactory.createTitledBorder("Dirección"));
 
-        JCheckBox chkEmpleado = new JCheckBox("Es usuario?");
-        JComboBox<String> cmbRol = new JComboBox<>();
-        cmbRol.setBorder(BorderFactory.createTitledBorder("Rol"));
+        JCheckBox chkIsEmployee = new JCheckBox("Es usuario?");
+        JComboBox<String> cmbRole = new JComboBox<>();
+        cmbRole.setBorder(BorderFactory.createTitledBorder("Rol"));
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
-        cmbRol.setModel(model);
+        cmbRole.setModel(model);
         AdminController controller = new AdminController();
-        Map<Long, String> roles = controller.listarRoles();
+        Map<Long, String> roles = controller.listRoles();
 
         List<Long> indices = new ArrayList<>(roles.keySet());
-        for (String rol : roles.values()) {
-            model.addElement(rol);
+        for (String role : roles.values()) {
+            model.addElement(role);
         }
-        cmbRol.setEnabled(false);
+        cmbRole.setEnabled(false);
 
         JButton btnAceptar = new JButton("Aceptar");
         btnAceptar.setBackground(Color.GREEN);
@@ -248,35 +252,35 @@ class CrearUsuarioDialog extends JDialog {
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 2;
-        add(txtNombre, constraints);
+        add(txtPersonName, constraints);
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
-        add(txtApellido, constraints);
+        add(txtPersonLastName, constraints);
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        add(txtDni, constraints);
+        add(txtPersonDNI, constraints);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        add(txtTelefono, constraints);
+        add(txtPersonPhone, constraints);
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
-        add(txtEmail, constraints);
+        add(txtPersonEmail, constraints);
         constraints.gridx = 0;
         constraints.gridy = 4;
         constraints.gridwidth = 2;
-        add(txtDireccion, constraints);
+        add(txtPersonAddress, constraints);
         constraints.gridx = 2;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        add(chkEmpleado, constraints);
+        add(chkIsEmployee, constraints);
         constraints.gridx = 2;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        add(cmbRol, constraints);
+        add(cmbRole, constraints);
         constraints.gridx = 1;
         constraints.gridy = 5;
         constraints.gridwidth = 1;
@@ -286,20 +290,20 @@ class CrearUsuarioDialog extends JDialog {
         constraints.gridwidth = 1;
         add(btnCancelar, constraints);
         pack();
-        chkEmpleado.addActionListener(e -> cmbRol.setEnabled(chkEmpleado.isSelected()));
+        chkIsEmployee.addActionListener(e -> cmbRole.setEnabled(chkIsEmployee.isSelected()));
         btnCancelar.addActionListener(e -> dispose());
         btnAceptar.addActionListener(e -> {
-            String nombre = txtNombre.getText();
-            String apellido = txtApellido.getText();
-            String dni = txtDni.getText();
-            String telefono = txtTelefono.getText();
-            String email = txtEmail.getText();
-            String direccion = txtDireccion.getText();
-            boolean esEmpleado = chkEmpleado.isSelected();
-            long idRol = indices.get(cmbRol.getSelectedIndex());
-            if (!"".equals(nombre) && !"".equals(apellido) && !"".equals(dni) && !"".equals(telefono) && !"".equals(email) && !"".equals(direccion)) {
+            String name = txtPersonName.getText();
+            String lastName = txtPersonLastName.getText();
+            String dni = txtPersonDNI.getText();
+            String phone = txtPersonPhone.getText();
+            String email = txtPersonEmail.getText();
+            String address = txtPersonAddress.getText();
+            boolean isEmployee = chkIsEmployee.isSelected();
+            long idRole = indices.get(cmbRole.getSelectedIndex());
+            if (!"".equals(name) && !"".equals(lastName) && !"".equals(dni) && !"".equals(phone) && !"".equals(email) && !"".equals(address)) {
                 AdminController adminController = new AdminController();
-                if (adminController.crearUsuario(new String[]{nombre, apellido, dni}, telefono, email, direccion, esEmpleado, idRol)) {
+                if (adminController.crearUsuario(new String[]{name, lastName, dni}, phone, email, address, isEmployee, idRole)) {
                     JOptionPane.showMessageDialog(null, "Usuario creado");
                     dispose();
                 } else {
@@ -312,8 +316,8 @@ class CrearUsuarioDialog extends JDialog {
     }
 }
 
-class CrearCredencialesDialog extends JDialog {
-    public CrearCredencialesDialog() {
+class NewCredentialsDialog extends JDialog {
+    public NewCredentialsDialog() {
         super();
         setTitle("Nueva Credencial");
         setLocationRelativeTo(null);
@@ -330,7 +334,7 @@ class CrearCredencialesDialog extends JDialog {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cmbEmpleado.setModel(model);
         AdminController controller = new AdminController();
-        String[][] empleados = controller.listarEmpleados();
+        String[][] empleados = controller.listEmployees();
         List<String> indicesEmpleadoID = new ArrayList<>();
         List<String> indicesRolID = new ArrayList<>();
         for (String[] empleado : empleados) {
@@ -373,7 +377,7 @@ class CrearCredencialesDialog extends JDialog {
             AdminController adminController = new AdminController();
             int empleadoID = Integer.parseInt(indicesEmpleadoID.get(cmbEmpleado.getSelectedIndex()));
             int rolID = Integer.parseInt(indicesRolID.get(cmbEmpleado.getSelectedIndex()));
-            if (adminController.crearCredenciales(usuario, password, empleadoID, rolID)) {
+            if (adminController.createCredentials(usuario, password, empleadoID, rolID)) {
                 JOptionPane.showMessageDialog(null, "Credenciales creadas");
                 dispose();
             } else {

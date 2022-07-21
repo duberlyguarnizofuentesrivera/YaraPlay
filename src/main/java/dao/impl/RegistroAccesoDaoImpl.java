@@ -41,7 +41,7 @@ public class RegistroAccesoDaoImpl implements Dao<RegistroAcceso> {
 
     @Override
     public void update(RegistroAcceso registroAcceso, String[] params) {
-
+        //para uso futuro
     }
 
     @Override

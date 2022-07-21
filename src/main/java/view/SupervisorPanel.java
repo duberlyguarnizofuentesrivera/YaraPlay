@@ -1,7 +1,7 @@
 package view;
 
-import controller.AlmaceneroController;
-import controller.UsuarioBasicoController;
+import controller.SupervisorController;
+import controller.UserController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,70 +10,70 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PanelSupervisor extends JPanel implements PanelYara {
-    final PanelUsuario mainPanel;
+public class SupervisorPanel extends JPanel implements PanelYara {
+    final UserPanel mainPanel;
 
 
-    public PanelSupervisor(PanelUsuario mainPanel) {
+    public SupervisorPanel(UserPanel mainPanel) {
         super();
         this.mainPanel = mainPanel;
     }
 
     @Override
-    public void crearControles() {
+    public void createControls() {
         // Utilizado para extender controles sobre el panel principal
     }
 
     @Override
-    public void crearEventos() {
-        mainPanel.btnSuperCrearAnaquel.addActionListener(e -> crearAnaquel());
-        mainPanel.btnSuperCrearCategoria.addActionListener(e -> crearCategoria());
-        mainPanel.btnSuperCrearProveedor.addActionListener(e -> crearProveedor());
-        mainPanel.btnSuperEliminarProveedor.addActionListener(e -> eliminarProveedor());
-        mainPanel.btnSuperEliminarCategoria.addActionListener(e -> eliminarCategoria());
-        mainPanel.btnSuperEliminarAnaquel.addActionListener(e -> eliminarAnaquel());
-        mainPanel.btnSuperVerAnaqueles.addActionListener(e -> verAnaqueles());
-        mainPanel.btnSuperVerCategorias.addActionListener(e -> verCategorias());
-        mainPanel.btnSuperVerProveedores.addActionListener(e -> verProveedores());
+    public void createEvents() {
+        mainPanel.btnSuperCreateShelf.addActionListener(e -> createShelf());
+        mainPanel.btnSuperCreateCategory.addActionListener(e -> createCategory());
+        mainPanel.btnSuperCreateSupplier.addActionListener(e -> createSupplier());
+        mainPanel.btnSuperDeleteSupplier.addActionListener(e -> deleteSupplier());
+        mainPanel.btnSuperDeleteCategory.addActionListener(e -> deleteCategory());
+        mainPanel.btnSuperDeleteShelf.addActionListener(e -> deleteShelf());
+        mainPanel.btnSuperViewShelves.addActionListener(e -> viewShelves());
+        mainPanel.btnSuperViewCategories.addActionListener(e -> viewCategories());
+        mainPanel.btnSuperViewSuppliers.addActionListener(e -> viewSuppliers());
 
     }
 
 
 
-    private void verProveedores() {
-        AlmaceneroController controller = new AlmaceneroController();
-        String[][] datos = controller.verProveedores();
+    private void viewSuppliers() {
+        SupervisorController controller = new SupervisorController();
+        String[][] datos = controller.viewSuppliers();
         String[] columnas = {"ID", "Razón Social"};
-        mainPanel.lblResultados.setText("Listado de proveedores");
-        mainPanel.txtResultados.setModel(new DefaultTableModel(datos, columnas));
+        mainPanel.lblResults.setText("Listado de proveedores");
+        mainPanel.tblResults.setModel(new DefaultTableModel(datos, columnas));
     }
 
 
-    private void verCategorias() {
-        AlmaceneroController controller = new AlmaceneroController();
-        String[][] datos = controller.verCategorias();
+    private void viewCategories() {
+        SupervisorController controller = new SupervisorController();
+        String[][] datos = controller.viewCategories();
         String[] columnas = {"ID", "Nombre"};
-        mainPanel.lblResultados.setText("Listado de categorías");
-        mainPanel.txtResultados.setModel(new DefaultTableModel(datos, columnas));
+        mainPanel.lblResults.setText("Listado de categorías");
+        mainPanel.tblResults.setModel(new DefaultTableModel(datos, columnas));
     }
 
-    private void verAnaqueles() {
-        AlmaceneroController controller = new AlmaceneroController();
-        String[][] datos = controller.verAnaqueles();
+    private void viewShelves() {
+        SupervisorController controller = new SupervisorController();
+        String[][] datos = controller.viewShelves();
         String[] columnas = {"ID", "Piso", "Pasaje", "Nivel", "Capacidad"};
-        mainPanel.lblResultados.setText("Listado de anaqueles");
-        mainPanel.txtResultados.setModel(new DefaultTableModel(datos, columnas));
+        mainPanel.lblResults.setText("Listado de anaqueles");
+        mainPanel.tblResults.setModel(new DefaultTableModel(datos, columnas));
     }
 
 
-    private void eliminarProveedor() {
+    private void deleteSupplier() {
         String id = JOptionPane.showInputDialog(null, "Busque en el listado de proveedores, luego ingrese el id del proveedor a eliminar");
         if (id != null) {
             if ("".equals(id)) {
                 JOptionPane.showMessageDialog(null, "Debe ingresar un id de proveedor");
             } else {
-                AlmaceneroController controller = new AlmaceneroController();
-                if (controller.eliminarProveedor(id)) {
+                SupervisorController controller = new SupervisorController();
+                if (controller.deleteSupplier(id)) {
                     JOptionPane.showMessageDialog(null, "Proveedor eliminado");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar el proveedor");
@@ -82,23 +82,23 @@ public class PanelSupervisor extends JPanel implements PanelYara {
         }
     }
 
-    private void crearProveedor() {
-        NuevoProveedorDialog nuevoProveedorDialog = new NuevoProveedorDialog();
-        nuevoProveedorDialog.setVisible(true);
+    private void createSupplier() {
+        NewSupplierDialog newSupplierDialog = new NewSupplierDialog();
+        newSupplierDialog.setVisible(true);
     }
 
-    private void crearCategoria() {
-        NuevaCategoriaDialog nuevaCategoriaDialog = new NuevaCategoriaDialog();
+    private void createCategory() {
+        NewCategoryDialog newCategoryDialog = new NewCategoryDialog();
     }
 
-    private void eliminarCategoria() {
+    private void deleteCategory() {
         String id = JOptionPane.showInputDialog(null, "Busque en el listado de categorías, luego ingrese el id de la categoría a eliminar");
         if (id != null) {
             if ("".equals(id)) {
                 JOptionPane.showMessageDialog(null, "Debe ingresar un id");
             } else {
-                AlmaceneroController controller = new AlmaceneroController();
-                if (controller.eliminarCategoria(id)) {
+                SupervisorController controller = new SupervisorController();
+                if (controller.deleteCategory(id)) {
                     JOptionPane.showMessageDialog(null, "Categoría eliminada");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar la categoría");
@@ -107,19 +107,19 @@ public class PanelSupervisor extends JPanel implements PanelYara {
         }
     }
 
-    private void crearAnaquel() {
-        NuevoAnaquelDialog dialog = new NuevoAnaquelDialog();
+    private void createShelf() {
+        NewShelfDialog dialog = new NewShelfDialog();
         dialog.setVisible(true);
     }
 
-    private void eliminarAnaquel() {
+    private void deleteShelf() {
         String id = JOptionPane.showInputDialog(null, "Busque en el listado de anaqueles, luego ingrese el id del anaquel a eliminar");
         if (id != null) {
             if ("".equals(id)) {
                 JOptionPane.showMessageDialog(null, "Debe ingresar un id");
             } else {
-                AlmaceneroController controller = new AlmaceneroController();
-                if (controller.eliminarAnaquel(id)) {
+                SupervisorController controller = new SupervisorController();
+                if (controller.deleteShelf(id)) {
                     JOptionPane.showMessageDialog(null, "Anaquel eliminado");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo eliminar el anaquel");
@@ -130,15 +130,15 @@ public class PanelSupervisor extends JPanel implements PanelYara {
 
 
     @Override
-    public void leerConfiguracion() {
+    public void readConfig() {
         // Utilizado para extender configuraciones sobre el panel principal
     }
 
 
 }
 
-class NuevoAnaquelDialog extends JDialog {
-    public NuevoAnaquelDialog() {
+class NewShelfDialog extends JDialog {
+    public NewShelfDialog() {
         super();
         setTitle("Nuevo Anaquel");
         setLocationRelativeTo(null);
@@ -194,8 +194,8 @@ class NuevoAnaquelDialog extends JDialog {
             if ("".equals(piso) || "".equals(pasillo) || "".equals(nivel) || "".equals(capacidad)) {
                 JOptionPane.showMessageDialog(null, "Debe ingresar todos los datos");
             } else {
-                AlmaceneroController controller = new AlmaceneroController();
-                if (controller.crearAnaquel(piso, pasillo, nivel, capacidad)) {
+                SupervisorController controller = new SupervisorController();
+                if (controller.createShelf(piso, pasillo, nivel, capacidad)) {
                     JOptionPane.showMessageDialog(null, "Anaquel creado");
                     dispose();
                 } else {
@@ -208,13 +208,13 @@ class NuevoAnaquelDialog extends JDialog {
     }
 }
 
-class NuevaCategoriaDialog {
-    public NuevaCategoriaDialog() {
+class NewCategoryDialog {
+    public NewCategoryDialog() {
         String nombre = JOptionPane.showInputDialog("Ingrese el nombre de la nueva categoría: ");
         if (nombre != null) {
             if (nombre.length() > 0) {
-                AlmaceneroController controller = new AlmaceneroController();
-                if (controller.crearCategoria(nombre)) {
+                SupervisorController controller = new SupervisorController();
+                if (controller.createCategory(nombre)) {
                     JOptionPane.showMessageDialog(null, "Categoría creada");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo crear la categoría");
@@ -226,8 +226,8 @@ class NuevaCategoriaDialog {
     }
 }
 
-class NuevoProveedorDialog extends JDialog {
-    public NuevoProveedorDialog() {
+class NewSupplierDialog extends JDialog {
+    public NewSupplierDialog() {
         super();
         setTitle("Nuevo Proveedor");
         setLocationRelativeTo(null);
@@ -237,8 +237,8 @@ class NuevoProveedorDialog extends JDialog {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
         constraints.insets = new Insets(10, 10, 10, 10);
-        JTextField txtRazonsocial = new JTextField(36);
-        txtRazonsocial.setBorder(BorderFactory.createTitledBorder("Nombre"));
+        JTextField txtSupplierName = new JTextField(36);
+        txtSupplierName.setBorder(BorderFactory.createTitledBorder("Nombre"));
         JTextField txtRuc = new JTextField(11);
         txtRuc.setBorder(BorderFactory.createTitledBorder("RUC (11 dígitos)"));
 
@@ -246,16 +246,16 @@ class NuevoProveedorDialog extends JDialog {
         cmbPersona.setBorder(BorderFactory.createTitledBorder("Contacto"));
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         cmbPersona.setModel(model);
-        UsuarioBasicoController controller = new UsuarioBasicoController();
-        Map<Long, String> listaNombresYApellidos = controller.listarNombresYApellidosYId();
+        UserController controller = new UserController();
+        Map<Long, String> listaNombresYApellidos = controller.listNamesAndID();
         for (String nombres : listaNombresYApellidos.values()) {
             model.addElement(nombres);
         }
         List<Long> indices = new ArrayList<>(listaNombresYApellidos.keySet());
-        JTextField txtDireccion = new JTextField(36);
-        txtDireccion.setBorder(BorderFactory.createTitledBorder("Dirección"));
-        JTextField txtTelefono = new JTextField(9);
-        txtTelefono.setBorder(BorderFactory.createTitledBorder("Teléfono (9 dígitos)"));
+        JTextField txtSupplierAddress = new JTextField(36);
+        txtSupplierAddress.setBorder(BorderFactory.createTitledBorder("Dirección"));
+        JTextField txtSupplierPhone = new JTextField(9);
+        txtSupplierPhone.setBorder(BorderFactory.createTitledBorder("Teléfono (9 dígitos)"));
         JButton btnAceptar = new JButton("Aceptar");
         btnAceptar.setBackground(Color.GREEN);
         btnAceptar.setForeground(Color.BLACK);
@@ -263,7 +263,7 @@ class NuevoProveedorDialog extends JDialog {
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
-        add(txtRazonsocial, constraints);
+        add(txtSupplierName, constraints);
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
@@ -275,11 +275,11 @@ class NuevoProveedorDialog extends JDialog {
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        add(txtDireccion, constraints);
+        add(txtSupplierAddress, constraints);
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        add(txtTelefono, constraints);
+        add(txtSupplierPhone, constraints);
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 1;
@@ -290,14 +290,14 @@ class NuevoProveedorDialog extends JDialog {
         add(btnCancelar, constraints);
         this.pack();
         btnAceptar.addActionListener(e -> {
-            String razonSocial = txtRazonsocial.getText();
+            String companyName = txtSupplierName.getText();
             String ruc = txtRuc.getText();
-            String direccion = txtDireccion.getText();
-            String telefono = txtTelefono.getText();
+            String companyAddress = txtSupplierAddress.getText();
+            String companyPhone = txtSupplierPhone.getText();
             Long idPersona = indices.get(cmbPersona.getSelectedIndex());
-            if (!"".equals(razonSocial) && !"".equals(ruc) && !"".equals(direccion) && !"".equals(telefono)) {
-                AlmaceneroController almaceneroController = new AlmaceneroController();
-                almaceneroController.crearProveedor(razonSocial, ruc, direccion, telefono, idPersona);
+            if (!"".equals(companyName) && !"".equals(ruc) && !"".equals(companyAddress) && !"".equals(companyPhone)) {
+                SupervisorController supervisorController = new SupervisorController();
+                supervisorController.createSupplier(companyName, ruc, companyAddress, companyPhone, idPersona);
                 JOptionPane.showMessageDialog(null, "Proveedor creado correctamente");
                 this.dispose();
             } else {

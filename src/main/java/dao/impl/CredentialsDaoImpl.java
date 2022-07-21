@@ -2,35 +2,35 @@ package dao.impl;
 
 import dao.Dao;
 import dao.JdbcConnection;
-import model.Credenciales;
+import model.Credentials;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CredencialesDaoImpl implements Dao<Credenciales> {
+public class CredentialsDaoImpl implements Dao<Credentials> {
     @Override
-    public void save(Credenciales credenciales) {
+    public void save(Credentials credentials) {
         JdbcConnection jdbcConnection = new JdbcConnection();
-        String query = "INSERT INTO credenciales (usuario, password, rol_id, empleado_id) VALUES ('" + credenciales.getUserName() + "', '" + credenciales.getPassword() + "','"+credenciales.getRol()+"','"+credenciales.getEmpleado()+"')";
+        String query = "INSERT INTO credenciales (usuario, password, rol_id, empleado_id) VALUES ('" + credentials.getUserName() + "', '" + credentials.getPassword() + "','" + credentials.getRole() + "','" + credentials.getEmployeeID() + "')";
         jdbcConnection.executeUpdate(query);
     }
 
     @Override
-    public void update(Credenciales credenciales, String[] params) {
-
+    public void update(Credentials credentials, String[] params) {
+        //para utilización en el futuro
     }
 
     @Override
-    public void delete(Credenciales credenciales) {
+    public void delete(Credentials credentials) {
         JdbcConnection jdbcConnection = new JdbcConnection();
-        String query = "DELETE FROM credenciales WHERE id = " + credenciales.getId();
+        String query = "DELETE FROM credenciales WHERE id = " + credentials.getId();
         jdbcConnection.executeUpdate(query);
     }
 
     @Override
-    public Optional<Credenciales> get(long id) {
-        List<Credenciales> credenciales = new ArrayList<>();
+    public Optional<Credentials> get(long id) {
+        List<Credentials> credenciales = new ArrayList<>();
         JdbcConnection jdbcConnection = new JdbcConnection();
         String query = "SELECT * FROM credenciales WHERE id = " + id;
         List<String[]> resultados = jdbcConnection.executeQuery(query);
@@ -38,38 +38,42 @@ public class CredencialesDaoImpl implements Dao<Credenciales> {
         return Optional.ofNullable(credenciales.get(0));
     }
 
-    private void convertToCredencial(List<Credenciales> credenciales, List<String[]> resultados) {
+    private void convertToCredencial(List<Credentials> credenciales, List<String[]> resultados) {
         for (String[] resultado : resultados) {
-            Credenciales credencial = new Credenciales();
+            Credentials credencial = new Credentials();
             credencial.setId(Long.parseLong(resultado[0]));
             credencial.setUserName(resultado[1]);
             credencial.setPassword(resultado[2]);
             if (resultado[3] != null) {
-                credencial.setRol(Integer.parseInt(resultado[3]));
+                credencial.setRole(Integer.parseInt(resultado[3]));
             }
             if (resultado[4] != null) {
-                credencial.setEmpleado(Integer.parseInt(resultado[4]));
+                credencial.setEmployeeID(Integer.parseInt(resultado[4]));
             }
             credenciales.add(credencial);
         }
     }
 
     @Override
-    public List<Credenciales> getAll() {
-        List<Credenciales> credenciales = new ArrayList<>();
+    public List<Credentials> getAll() {
+        List<Credentials> credenciales = new ArrayList<>();
         JdbcConnection jdbcConnection = new JdbcConnection();
         List<String[]> resultados = jdbcConnection.executeQuery("SELECT * FROM credenciales");
         convertToCredencial(credenciales, resultados);
         return credenciales;
     }
 
-    public Optional<Credenciales> getByUserName(String username) {
-        List<Credenciales> credenciales = new ArrayList<>();
+    public Optional<Credentials> getByUserName(String username) {
+        List<Credentials> credenciales = new ArrayList<>();
         JdbcConnection jdbcConnection = new JdbcConnection();
         String query = "SELECT * FROM credenciales WHERE usuario = '" + username + "'";
         List<String[]> resultados = jdbcConnection.executeQuery(query);
         convertToCredencial(credenciales, resultados);
-        return Optional.ofNullable(credenciales.get(0));
+        if (credenciales.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(credenciales.get(0));
+        }
     }
 
     public Optional<String> getNombresPersona(String username) {
